@@ -1,0 +1,51 @@
+.pro file
+
+INCLUDEPATH += "/usr/include/octave-4.0.3/octave"
+INCLUDEPATH += "/usr/include/octave-4.0.3/octave/.."
+LIBS += "/usr/lib/i386-linux-gnu/liboctinterp.so"
+LIBS += "/usr/lib/i386-linux-gnu/liboctave.so"
+#LIBS += "/usr/lib/arm-linux-gnueabihf/liboctave.so"
+#LIBS += "/usr/lib/arm-linux-gnueabihf/liboctinterp.so"
+#LIBS += -L/usr/lib -lwiringPi
+
+
+
+.h
+
+#include <octave/oct.h>
+#include <octave/octave.h>
+#include <octave/parse.h>
+#include <octave/toplev.h>
+
+#include <wiringPi.h>
+#include <wiringPiSPI.h>
+
+.cpp
+
+    // inicializacion de octave
+    // ejecutar una sola vez
+    string_vector oct_str_vct (2);
+    oct_str_vct(0) = "embedded";
+    oct_str_vct(1) = "-q";
+    octave_main(2, oct_str_vct.c_str_vec(), 1);
+
+
+
+    // cierre de octave.
+    clean_up_and_exit(0);
+
+
+
+
+    // llamado a la funcion
+    octave_function *funcion = load_fcn_from_file(<ruta de la funcion>);
+    octave_value_list salida_list = feval(funcion, entrada_list, 1);
+
+
+
+
+
+
+
+------------------------------------
+/usr/include/wiringPi.h
