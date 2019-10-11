@@ -3,8 +3,20 @@
 
 #include <QMainWindow>
 #include "dev_op.h"
-//#include <wiringPi.h>
-//#include <wiringPiSpi.h>
+
+#define PC_RASPBERRY_PI 0
+#define PC_NOTEBOOK     1
+
+#define CURRENT_PC PC_RASPBERRY_PI
+//#define CURRENT_PC PC_NOTEBOOK
+
+
+#if (CURRENT_PC == PC_RASPBERRY_PI)
+
+#include <wiringPi.h>
+#include <wiringPiSPI.h>
+
+#endif
 
 namespace Ui {
 class MainWindow;

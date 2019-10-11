@@ -43,10 +43,13 @@ void MainWindow::on_b_enviar_clicked()
     DDEBUG("canal" << canal);
     DDEBUG("velocidad" << velocidad);
 
-//    if(wiringPiSPISetup(canal, velocidad) == -1){
-//        DLOG("no se pudo configurar el canal");
-//        return;
-//    }
+#if CURRENT_PC == PC_RASPBERRY_PI
+    if(wiringPiSPISetup(canal, velocidad) == -1){
+        DLOG("no se pudo configurar el canal");
+        return;
+    }
+
+#endif
 
 
     //convertir datos si necesario
@@ -73,7 +76,10 @@ void MainWindow::on_b_enviar_clicked()
 
 
     int enviados = 0;
-//    enviados = wiringPiSPIDataRW(canal, in_char, largo);
+
+#if CURRENT_PC == PC_RASPBERRY_PI
+    enviados = wiringPiSPIDataRW(canal, reinterpret_cast<unsigned char*>(in_char), largo);
+#endif
 
     DDEBUG("cantidad de datos enviados" << enviados);
 
@@ -82,9 +88,12 @@ void MainWindow::on_b_enviar_clicked()
     DDEBUG("out byteArray hex" << out_byteArray.toHex());
 
     QString out_str = "";
+    out_str.append(in_byteArray.toHex());
+    out_str.append("->>");
     out_str.append(out_byteArray.toHex());
 
     ui->tb_out->append(out_str);
+    ui->l_in->clear();
 
     return;
 }
