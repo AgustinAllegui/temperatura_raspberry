@@ -14,7 +14,7 @@
   BSD license, all text above must be included in any redistribution
  ****************************************************/
 
-#include "Adafruit_MAX31865.h"
+#include <Adafruit_MAX31865.h>
 
 // Use software SPI: CS, DI, DO, CLK
 Adafruit_MAX31865 max = Adafruit_MAX31865(10, 11, 12, 13);
