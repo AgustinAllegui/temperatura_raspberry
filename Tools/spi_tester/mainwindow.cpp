@@ -6,6 +6,20 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    pinCs0 = 3;
+    pinCs1 = 2;
+
+#if CURRENT_PC == PC_RASPBERRY_PI
+    wiringPiSetup();
+    ui->sb_pin0->setValue(pinCs0);
+    ui->sb_pin1->setValue(pinCs1);
+
+    pinMode(pinCs0,OUTPUT);
+    pinMode(pinCs1,OUTPUT);
+    digitalWrite(pinCs0,HIGH);
+    digitalWrite(pinCs1,HIGH);
+#endif
+
 }
 
 MainWindow::~MainWindow()
@@ -78,7 +92,30 @@ void MainWindow::on_b_enviar_clicked()
     int enviados = 0;
 
 #if CURRENT_PC == PC_RASPBERRY_PI
+    if(ui->rb_ch0->isChecked()){
+        digitalWrite(pinCs0,LOW);
+        DDEBUG("pin" << pinCs0 << "en 0");
+    }else if(ui->rb_ch1->isChecked()){
+        digitalWrite(pinCs1,LOW);
+        DDEBUG("pin" << pinCs1 << "en 0");
+    }else{
+        return;
+    }
+    QThread::msleep(2);
+
     enviados = wiringPiSPIDataRW(canal, reinterpret_cast<unsigned char*>(in_char), largo);
+
+    QThread::msleep(2);
+
+    if(ui->rb_ch0->isChecked()){
+        digitalWrite(pinCs0,HIGH);
+        DDEBUG("pin" << pinCs0 << "en 1");
+    }else if(ui->rb_ch1->isChecked()){
+        digitalWrite(pinCs1,HIGH);
+        DDEBUG("pin" << pinCs1 << "en 1");
+    }else{
+        return;
+    }
 #endif
 
     DDEBUG("cantidad de datos enviados" << enviados);

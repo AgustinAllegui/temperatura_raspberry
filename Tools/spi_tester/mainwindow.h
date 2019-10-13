@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QThread>
 #include "dev_op.h"
 
 #define PC_RASPBERRY_PI 0
@@ -33,13 +34,14 @@ public:
 
 private slots:
     void on_l_in_returnPressed();
-
     void on_b_enviar_clicked();
-
     void on_b_limpiar_clicked();
 
 private:
     Ui::MainWindow *ui;
+
+    int pinCs0;
+    int pinCs1;
 
 
 };

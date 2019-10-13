@@ -23,6 +23,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTextBrowser>
 #include <QtWidgets/QToolBar>
@@ -54,6 +55,9 @@ public:
     QSpacerItem *horizontalSpacer_2;
     QSpacerItem *horizontalSpacer_3;
     QSpacerItem *horizontalSpacer_4;
+    QSpinBox *sb_pin0;
+    QSpinBox *sb_pin1;
+    QLabel *label_5;
     QLabel *label_2;
     QTextBrowser *tb_out;
     QHBoxLayout *horizontalLayout;
@@ -125,7 +129,7 @@ public:
         l_speed0 = new QLineEdit(widget_2);
         l_speed0->setObjectName(QStringLiteral("l_speed0"));
 
-        gridLayout->addWidget(l_speed0, 1, 1, 1, 1);
+        gridLayout->addWidget(l_speed0, 1, 2, 1, 1);
 
         label_3 = new QLabel(widget_2);
         label_3->setObjectName(QStringLiteral("label_3"));
@@ -141,24 +145,45 @@ public:
         l_speed1 = new QLineEdit(widget_2);
         l_speed1->setObjectName(QStringLiteral("l_speed1"));
 
-        gridLayout->addWidget(l_speed1, 2, 1, 1, 1);
+        gridLayout->addWidget(l_speed1, 2, 2, 1, 1);
 
         label_4 = new QLabel(widget_2);
         label_4->setObjectName(QStringLiteral("label_4"));
 
-        gridLayout->addWidget(label_4, 0, 1, 1, 1);
+        gridLayout->addWidget(label_4, 0, 2, 1, 1);
 
         horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        gridLayout->addItem(horizontalSpacer_2, 1, 2, 1, 1);
+        gridLayout->addItem(horizontalSpacer_2, 1, 3, 1, 1);
 
         horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        gridLayout->addItem(horizontalSpacer_3, 2, 2, 1, 1);
+        gridLayout->addItem(horizontalSpacer_3, 2, 3, 1, 1);
 
         horizontalSpacer_4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        gridLayout->addItem(horizontalSpacer_4, 0, 2, 1, 1);
+        gridLayout->addItem(horizontalSpacer_4, 0, 3, 1, 1);
+
+        sb_pin0 = new QSpinBox(widget_2);
+        sb_pin0->setObjectName(QStringLiteral("sb_pin0"));
+        sb_pin0->setEnabled(false);
+        sb_pin0->setMaximum(15);
+        sb_pin0->setValue(3);
+
+        gridLayout->addWidget(sb_pin0, 1, 1, 1, 1);
+
+        sb_pin1 = new QSpinBox(widget_2);
+        sb_pin1->setObjectName(QStringLiteral("sb_pin1"));
+        sb_pin1->setEnabled(false);
+        sb_pin1->setMaximum(15);
+        sb_pin1->setValue(2);
+
+        gridLayout->addWidget(sb_pin1, 2, 1, 1, 1);
+
+        label_5 = new QLabel(widget_2);
+        label_5->setObjectName(QStringLiteral("label_5"));
+
+        gridLayout->addWidget(label_5, 0, 1, 1, 1);
 
 
         verticalLayout->addWidget(widget_2);
@@ -196,7 +221,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 607, 26));
+        menuBar->setGeometry(QRect(0, 0, 607, 27));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -222,6 +247,7 @@ public:
         rb_ch0->setText(QApplication::translate("MainWindow", "0", Q_NULLPTR));
         l_speed1->setText(QApplication::translate("MainWindow", "500000", Q_NULLPTR));
         label_4->setText(QApplication::translate("MainWindow", "Velocidad [Hz]", Q_NULLPTR));
+        label_5->setText(QApplication::translate("MainWindow", "Pin", Q_NULLPTR));
         label_2->setText(QApplication::translate("MainWindow", "Output", Q_NULLPTR));
         b_limpiar->setText(QApplication::translate("MainWindow", "Limpiar", Q_NULLPTR));
         b_enviar->setText(QApplication::translate("MainWindow", "Enviar", Q_NULLPTR));
