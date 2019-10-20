@@ -1,0 +1,11 @@
+# pasos para la instalacion del programa
+
+#instalar qt5
+sudo apt-get install qt????
+
+#instalar octave
+sudo apt-get octave
+
+
+#habilitar SPI
+
