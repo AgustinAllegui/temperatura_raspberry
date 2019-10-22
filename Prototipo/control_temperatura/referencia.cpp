@@ -24,6 +24,16 @@ double Ref_base::getRef(const double t_, const int n_, double *ref_array_)
     return ref0;
 }
 
+void Ref_base::getInitRef(QVector<double> &t_, QVector<double> &ref_, const double TFinal_)
+{
+    t_.clear();
+    ref_.clear();
+    for(double t = 0; t < TFinal_; t+TsContainer::Ts){
+        t_.append(t);
+        ref_.append(getRef(t));
+    }
+}
+
 bool Ref_base::verificar()
 {
     DLOG("ERROR: verificar referencia base");

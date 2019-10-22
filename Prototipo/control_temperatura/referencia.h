@@ -23,6 +23,7 @@ public:
     //interfaz
     virtual double getRef(const double t_);
     double getRef(const double t_, const int n_, double *ref_array_);
+    void getInitRef(QVector<double> &t_, QVector<double> &ref_, const double TFinal_);
     virtual bool verificar();
 };
 
