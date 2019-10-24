@@ -26,6 +26,7 @@ double Ref_base::getRef(const double t_, const int n_, double *ref_array_)
 
 void Ref_base::getInitRef(QVector<double> &t_, QVector<double> &ref_, const double TFinal_)
 {
+    DTRACE("generar vectores hasta" << TFinal_);
     t_.clear();
     ref_.clear();
     for(double t = 0; t < TFinal_; t+=TsContainer::Ts){

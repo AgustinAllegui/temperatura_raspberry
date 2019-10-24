@@ -14,8 +14,8 @@
 
 #if CURRENT_DEVICE == ON_PC
 
-#define REF_SIMPLE_DIR  "/home/pi/Documents/temperatura_raspberry/Files/Internos/PID_rbp.m"
-#define PID_DIR         "/home/pi/Documents/temperatura_raspberry/Files/Internos/simp_fun.m"
+#define PID_DIR         "/home/pi/Documents/temperatura_raspberry/Files/Internos/PID_rbp.m"
+#define REF_SIMPLE_DIR  "/home/pi/Documents/temperatura_raspberry/Files/Internos/simp_fun.m"
 
 
 #elif CURRENT_DEVICE == ON_RASPBERRY
@@ -58,7 +58,7 @@
 
 
 #if (DEBUG_LEVEL >= DEB_TRACE)
-    #define DTRACE(A) qDebug() << "-TRACE:" << A << "/  /" << __FILE__ << __LINE__
+    #define DTRACE(A) qDebug() << "-TRACE:" << A << "\t[" << __FILE__ << __LINE__ <<']'
 #else
     #define DTRACE(A)
 #endif

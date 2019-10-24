@@ -24,6 +24,7 @@ GraficoCustom::GraficoCustom(QWidget *parent)
     QCPAxisRect *graficoU = new QCPAxisRect(this);
     graficoU->axis(QCPAxis::atLeft)->setLabel("U [%]");
 
+
     lineaU = addGraph(graficoU->axis(QCPAxis::atBottom), graficoU->axis(QCPAxis::atLeft));
     lineaU->setName("Accion de control");
 
@@ -93,6 +94,7 @@ void GraficoCustom::rearmar(const bool phFlag_)
     }
 
     phShowed = phFlag_;
+    reescalar();
     replot();
 }
 
@@ -101,11 +103,13 @@ void GraficoCustom::rearmar(const bool phFlag_)
  */
 void GraficoCustom::setRef(QVector<double> referencia_, QVector<double> tiempo_)
 {
+    DTRACE("dibujar referencia inicial");
     lineaTemp->data().clear();
     lineaU->data().clear();
     lineaPh->data().clear();
     lineaRef->data().clear();
     lineaRef->setData(tiempo_, referencia_, true);
+    reescalar();
     replot();
 }
 
@@ -115,15 +119,23 @@ void GraficoCustom::addPoint(const double t_, const double referencia_, const do
     lineaRef->addData(t_, referencia_);
     lineaTemp->addData(t_, temperatura_);
     lineaU->addData(t_, u_);
+    reescalar();
     replot();
 }
 
 void GraficoCustom::addPhPoint(const double t_, const double ph_)
 {
     lineaPh->addData(t_, ph_);
+    reescalar();
     replot();
 }
 
 
-
+void GraficoCustom::reescalar()
+{
+//    lineaRef->rescaleKeyAxis();
+    rescaleAxes();
+    lineaU->keyAxis()->setRange(lineaRef->keyAxis()->range());
+    lineaPh->keyAxis()->setRange(lineaRef->keyAxis()->range());
+}
 

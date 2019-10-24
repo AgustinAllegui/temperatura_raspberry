@@ -345,6 +345,7 @@ void MainWindow::on_b_usar_t_val_clicked()
 
 void MainWindow::on_tabWidget_currentChanged(int index)
 {
+    DTRACE("cambio de pestaña" << ui->tabWidget->tabText(index));
     if(ui->tabWidget->tabText(index) == "Resumen"){
         //escribir resumen
         if(!controlSys.isRuning()){
@@ -354,6 +355,15 @@ void MainWindow::on_tabWidget_currentChanged(int index)
     }else if(ui->tabWidget->tabText(index) == "Supervision"){
         //dibujar referencia si no esta iniciado
         ui->g_supervision->rearmar(ui->cb_sensor_ph->isChecked());
+        QVector<double> refT, refV;
+        double tFinal = 10*60;
+        if(ui->cb_t_final->isChecked()){
+            tFinal = ui->timeEdit_duracion->time().hour()*3600;
+            tFinal += ui->timeEdit_duracion->time().minute()*60;
+            tFinal += ui->timeEdit_duracion->time().second();
+        }
+        controlSys.referencia->getInitRef(refT, refV, tFinal);
+        ui->g_supervision->setRef(refV, refT);
 
     }
 }

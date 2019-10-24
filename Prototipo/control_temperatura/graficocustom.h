@@ -20,10 +20,11 @@ public:
 
 
 private:
+    //metodos privados
+    void reescalar();
+
     //variables internas
     bool phShowed;
-
-
 
     // elementos del grafico
     QCPAxisRect *graficoPh;
