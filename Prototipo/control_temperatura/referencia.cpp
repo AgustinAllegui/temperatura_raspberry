@@ -37,7 +37,7 @@ void Ref_base::getInitRef(QVector<double> &t_, QVector<double> &ref_, const doub
 
 bool Ref_base::verificar()
 {
-    DLOG("ERROR: verificar referencia base");
+    DERROR("intento de verificar referencia base");
     return false;
 }
 
@@ -66,7 +66,7 @@ bool Ref_valores::verificar()
     //abrir el archivo
     QFile archivo(fileDir);
     if(!archivo.open(QFile::ReadOnly)){
-        DLOG("Error al abrir archivo");
+        DERROR(" no se pudo abrir archivo");
         return false;
     }
 
@@ -100,7 +100,7 @@ bool Ref_valores::verificar()
     }
 
     if(!thereIsValid){
-        DLOG("Error: no hay valores validos en el archivo despues de "<< fileLength << "filas");
+        DERROR("no hay valores validos en el archivo despues de "<< fileLength << "filas");
     }
     return thereIsValid;
 }
@@ -190,13 +190,13 @@ void Ref_funcionC::setFile(QString fileDir_)
     fileDir = fileDir_;
     QFile archivo(fileDir);
     if(!archivo.exists()){
-        DLOG("error, archivo no existe");
+        DERROR("archivo no existe");
         return;
     }
 
     //checkear si hay funcion de octave en el archivo
     if(!archivo.open(QFile::ReadOnly)){
-        DLOG("error al abrir archivo");
+        DERROR("no se pudo abrir archivo");
         return;
     }
 
@@ -208,7 +208,7 @@ void Ref_funcionC::setFile(QString fileDir_)
             break;
         }
         if(archivo.atEnd()){
-            DLOG("Error: el archivo no contiene una funcion");
+            DERROR("el archivo no contiene una funcion");
             break;
         }
     }
@@ -270,7 +270,7 @@ void Ref_funcionS::setFunction(QString simpFunction_, QString fileDir_)
         archivo.remove();
     }
     if(!archivo.open(QFile::WriteOnly)){
-        DLOG("error al generar el archivo");
+        DERROR("no se pudo generar el archivo");
     }
 
     archivo.write("% archivo del sistema. no modificar\n");

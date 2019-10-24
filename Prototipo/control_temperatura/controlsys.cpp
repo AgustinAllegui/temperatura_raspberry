@@ -68,13 +68,13 @@ bool ControlSys::controlStart()
     DTRACE("Control system: Control start");
     timeSinceStart = 0;
     if(!referencia->verificar()){
-        DLOG("Error: referencia no verificada");
+        DERROR("referencia no verificada");
         emit s_control_stop();
         return false;
     }
     DDEBUG("referencia verificada");
     if(!algoritmo->verificar()){
-        DLOG("Error: Algoritmo no verificado");
+        DERROR("Algoritmo no verificado");
         emit s_control_stop();
         return false;
     }

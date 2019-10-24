@@ -1,6 +1,7 @@
 #ifndef DEV_OP_H
 #define DEV_OP_H
 
+//--------------------------------------------------------------------------------------------
 /*  configuracion de direcciones para los archivos internos
  */
 
@@ -27,8 +28,8 @@
 
 
 
-
-/*  este archivo contiene funciones para el desarrollo y debugueo
+//--------------------------------------------------------------------------------------------
+/*  Niveles demensajes en la consola
  */
 #include <QDebug>
 #include <QString>
@@ -69,6 +70,9 @@
 #else
     #define DDEBUG(A)
 #endif
+
+
+#define DERROR(A) qDebug() << "-Error:" << A << "\t[" << __FILE__ << __LINE__ <<']'
 
 
 #endif // DEV_OP_H

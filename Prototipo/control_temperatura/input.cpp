@@ -23,14 +23,14 @@ double Input_base::read()
 //    DTRACE("input read from text");
     QFile archivo(direccion);
     if(!archivo.open(QFile::ReadOnly)){
-        DLOG("Error al abrir archivo pt100");
+        DERROR("no se pudo abrir archivo pt100");
         return -1;
     }
 
     static int reglon_count = 0;
 
     if(archivo.atEnd()){
-        DLOG("Error: Archivo pt100 vacio");
+        DERROR("Archivo pt100 vacio");
         return -2;
     }
 

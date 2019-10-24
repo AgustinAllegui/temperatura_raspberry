@@ -19,13 +19,13 @@ void Algoritmo_base::setFileDir(QString fileDir_)
     fileDir = fileDir_;
     QFile archivo(fileDir);
     if(!archivo.exists()){
-        DLOG("error, archivo no existe");
+        DERROR("archivo no existe");
         return;
     }
 
     //checkear si hay funcion de octave en el archivo
     if(!archivo.open(QFile::ReadOnly)){
-        DLOG("error al abrir archivo");
+        DERROR("no se pudo abrir archivo");
         return;
     }
 
@@ -37,7 +37,7 @@ void Algoritmo_base::setFileDir(QString fileDir_)
             break;
         }
         if(archivo.atEnd()){
-            DLOG("Error: el archivo no contiene una funcion");
+            DERROR("el archivo no contiene una funcion");
             break;
         }
     }

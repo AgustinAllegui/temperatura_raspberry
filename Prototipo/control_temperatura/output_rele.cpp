@@ -31,7 +31,7 @@ void Output_rele::setOutput(const double output_)
     QFile archivo(direccion);
     if(!archivo.open(QFile::WriteOnly | QFile::Append)){
         //error al abrir el archivo
-        DLOG("Error al abrir el archivo out.txt");
+        DERROR("no se pudo abrir el archivo out.txt");
     }
 
     QByteArray byteArray;
