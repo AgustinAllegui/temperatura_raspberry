@@ -19,9 +19,14 @@ public:
     void addPhPoint(const double t_, const double ph_);
 
 
+private:
+    //variables internas
+    bool phShowed;
+
+
 
     // elementos del grafico
-    QCPAxisRect *graficoTemp, *graficoU, *graficoPh;
+    QCPAxisRect *graficoPh;
     QCPGraph *lineaRef, *lineaTemp;
     QCPGraph *lineaU;
     QCPGraph *lineaPh;

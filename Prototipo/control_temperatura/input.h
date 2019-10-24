@@ -56,4 +56,5 @@ public:
 //    double read();
 };
 
-#endif // INPUT_H
+
+#endif

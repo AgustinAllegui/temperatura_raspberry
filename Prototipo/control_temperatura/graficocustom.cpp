@@ -6,7 +6,7 @@ GraficoCustom::GraficoCustom(QWidget *parent)
     plotLayout()->clear();
 
     // grafico de temperatura
-    graficoTemp = new QCPAxisRect(this);
+    QCPAxisRect *graficoTemp = new QCPAxisRect(this);
     graficoTemp->axis(QCPAxis::atLeft)->setLabel("Temperatura [°C]");
 
     lineaRef = addGraph(graficoTemp->axis(QCPAxis::atBottom), graficoTemp->axis(QCPAxis::atLeft));
@@ -16,25 +16,36 @@ GraficoCustom::GraficoCustom(QWidget *parent)
     lineaTemp->setName("Temperatura");
     lineaTemp->setPen(QPen(QColor(Qt::red)));
 
-    //leyenda
-//    leyenda = new QCPLegend();
-//    leyenda->setWrap(1);
-//    lineaRef->addToLegend(leyenda);
-//    lineaTemp->addToLegend(leyenda);
+    plotLayout()->addElement(0,0,graficoTemp);
 
 
 
     // grafico de Accion de control
-    graficoU = new QCPAxisRect(this);
+    QCPAxisRect *graficoU = new QCPAxisRect(this);
     graficoU->axis(QCPAxis::atLeft)->setLabel("U [%]");
 
     lineaU = addGraph(graficoU->axis(QCPAxis::atBottom), graficoU->axis(QCPAxis::atLeft));
-//    lineaU->setName("Accion de control");
+    lineaU->setName("Accion de control");
+
+    plotLayout()->addElement(2,0,graficoU);
 
     // grafico de ph
     graficoPh = new QCPAxisRect(this);
     lineaPh = addGraph(graficoPh->axis(QCPAxis::atBottom), graficoPh->axis(QCPAxis::atLeft));
+    lineaPh->setName("PH");
+    graficoPh->axis(QCPAxis::atLeft)->setLabel("PH");
 
+    //leyenda
+    QCPLegend *leyenda = new QCPLegend();
+    plotLayout()->addElement(1,0,leyenda);
+    plotLayout()->setRowStretchFactor(1,0.0000001);
+    leyenda->setWrap(1);
+    for(int i = 0; i<5; i++){
+        leyenda->removeItem(i);
+    }
+    lineaRef->addToLegend(leyenda);
+    lineaTemp->addToLegend(leyenda);
+    leyenda->setVisible(true);
 
     margenIzq = new QCPMarginGroup(this);
     margenDer = new QCPMarginGroup(this);
@@ -44,6 +55,15 @@ GraficoCustom::GraficoCustom(QWidget *parent)
 //    graficoTemp->axis(QCPAxis::atBottom)->setTicker(tiempoTick);
 //    graficoU->axis(QCPAxis::atBottom)->setTicker(tiempoTick);
 
+    graficoTemp->setMarginGroup(QCP::msLeft, margenIzq);
+    graficoU->setMarginGroup(QCP::msLeft, margenIzq);
+    leyenda->setMarginGroup(QCP::msLeft, margenIzq);
+
+    graficoTemp->setMarginGroup(QCP::msRight, margenDer);
+    graficoU->setMarginGroup(QCP::msRight, margenDer);
+    leyenda->setMarginGroup(QCP::msRight, margenDer);
+
+    phShowed = false;
     rearmar(false);
 }
 
@@ -52,49 +72,27 @@ GraficoCustom::~GraficoCustom()
 
 }
 
-/* quita todos los elementos del layout y los vuelve a agregar
+/*  limpia los datos de las lineas y pone y saca el grafico de ph
  */
 void GraficoCustom::rearmar(const bool phFlag_)
 {
-    //limpiar todo
-    plotLayout()->clear();
-    lineaRef->data().clear();
-    lineaTemp->data().clear();
-    lineaPh->data().clear();
-
-    //agregar los graficos
-    plotLayout()->addElement(0,0,graficoTemp);
-
-    QCPLegend *leyenda = new QCPLegend();
-    leyenda->setWrap(1);
-    plotLayout()->addElement(1,0,leyenda);
-    lineaRef->addToLegend(leyenda);
-    lineaTemp->addToLegend(leyenda);
-//    plotLayout()->addElement(1,0,leyenda);
-//    legend->setVisible(true);
-    plotLayout()->setRowStretchFactor(1,0.0001);
-    plotLayout()->addElement(2,0,graficoU);
+    if(phFlag_ == phShowed){
+        replot();
+        return;
+    }
 
     if(phFlag_){
         plotLayout()->addElement(3,0,graficoPh);
-    }
-
-    //fijar los margenes
-    graficoTemp->setMarginGroup(QCP::msLeft, margenIzq);
-    graficoU->setMarginGroup(QCP::msLeft, margenIzq);
-
-    graficoTemp->setMarginGroup(QCP::msRight, margenDer);
-    graficoU->setMarginGroup(QCP::msRight, margenDer);
-
-    leyenda->setMarginGroup(QCP::msLeft, margenIzq);
-    leyenda->setMarginGroup(QCP::msRight, margenDer);
-
-    if(phFlag_){
         graficoPh->setMarginGroup(QCP::msLeft, margenIzq);
         graficoPh->setMarginGroup(QCP::msRight, margenDer);
+        graficoPh->setVisible(true);
+    }else{
+        plotLayout()->take(graficoPh);
+        graficoPh->setVisible(false);
+        plotLayout()->simplify();
     }
 
-
+    phShowed = phFlag_;
     replot();
 }
 

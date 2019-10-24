@@ -24,7 +24,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>6</number>
       </property>
       <widget class="QWidget" name="tab_ts">
        <attribute name="title">
@@ -43,7 +43,7 @@
           <item>
            <widget class="QLineEdit" name="l_ts">
             <property name="text">
-             <string>10</string>
+             <string>5</string>
             </property>
            </widget>
           </item>
@@ -88,7 +88,7 @@
            <string>PT100</string>
           </property>
           <property name="checked">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -96,6 +96,9 @@
          <widget class="QRadioButton" name="rb_term">
           <property name="text">
            <string>Termocupla</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -110,6 +113,9 @@
          <widget class="QCheckBox" name="cb_sensor_ph">
           <property name="text">
            <string>Sensor de Ph</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -139,7 +145,7 @@
            <string>Funcion simple</string>
           </property>
           <property name="checked">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -165,6 +171,9 @@
          <widget class="QRadioButton" name="rb_ref_fun">
           <property name="text">
            <string>Archivo de funcion</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -311,7 +320,7 @@
            <string>PID</string>
           </property>
           <property name="checked">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -365,6 +374,9 @@
          <widget class="QRadioButton" name="rb_c_custom">
           <property name="text">
            <string>Contrador personalizado</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -449,6 +461,9 @@
            <widget class="QCheckBox" name="cb_t_final">
             <property name="text">
              <string>Detener experimento despues de:</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -586,7 +601,7 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item row="0" column="1" rowspan="2">
-           <widget class="QWidget" name="widget_2" native="true"/>
+           <widget class="GraficoCustom" name="g_supervision" native="true"/>
           </item>
          </layout>
         </item>
@@ -727,6 +742,14 @@ p, li { white-space: pre-wrap; }
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>GraficoCustom</class>
+   <extends>QWidget</extends>
+   <header>graficocustom.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

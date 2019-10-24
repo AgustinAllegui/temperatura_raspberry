@@ -33,7 +33,8 @@ SOURCES += main.cpp\
     algoritmo.cpp \
     output_rele.cpp \
     Libs/qcustomplot.cpp \
-    graficocustom.cpp
+    graficocustom.cpp \
+    Libs/pinhandler.cpp
 
 HEADERS  += mainwindow.h \
     tscontainer.h \
@@ -45,7 +46,8 @@ HEADERS  += mainwindow.h \
     output_rele.h \
     dev_op.h \
     Libs/qcustomplot.h \
-    graficocustom.h
+    graficocustom.h \
+    Libs/pinhandler.h
 
 FORMS    += mainwindow.ui
 
@@ -55,7 +57,12 @@ FORMS    += mainwindow.ui
 
 INCLUDEPATH += "/usr/include/octave-4.0.3/octave"
 INCLUDEPATH += "/usr/include/octave-4.0.3/octave/.."
+
+#habilitar para compilar en PC
 LIBS += "/usr/lib/i386-linux-gnu/liboctinterp.so"
 LIBS += "/usr/lib/i386-linux-gnu/liboctave.so"
+
+#habilitar para compilar en raspberry
 #LIBS += "/usr/lib/arm-linux-gnueabihf/liboctave.so"
 #LIBS += "/usr/lib/arm-linux-gnueabihf/liboctinterp.so"
+#LIBS += -L/usr/lib -lwiringPi

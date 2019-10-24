@@ -28,7 +28,7 @@ void Ref_base::getInitRef(QVector<double> &t_, QVector<double> &ref_, const doub
 {
     t_.clear();
     ref_.clear();
-    for(double t = 0; t < TFinal_; t+TsContainer::Ts){
+    for(double t = 0; t < TFinal_; t+=TsContainer::Ts){
         t_.append(t);
         ref_.append(getRef(t));
     }

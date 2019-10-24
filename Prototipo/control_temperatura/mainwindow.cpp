@@ -35,14 +35,20 @@ void MainWindow::setInitialValues()
 {
     controlSys.salida = &OutRele;
     ui->l_ts->setText("10");
+    on_l_ts_editingFinished();
+
     ui->rb_PT100->setChecked(true);
     ui->cb_sensor_ph->setChecked(false);
-    ui->rb_ref_simple->setChecked(true);
+
     ui->l_ref_simple->setText("0.2*t/Ts");
-    ui->rb_PID->setChecked(true);
+    ui->rb_ref_simple->setChecked(true);
+
     ui->l_Kp->setText("5");
     ui->l_Ki->setText("1");
     ui->l_Kd->setText("0");
+    ui->rb_PID->setChecked(true);
+
+    ui->cb_t_final->setChecked(false);
 }
 
 //--------------------------------------------------------------------------------
@@ -53,6 +59,7 @@ void MainWindow::setInitialValues()
 
 void MainWindow::on_l_ts_editingFinished()
 {
+    DTRACE("Ts editado");
     CONTROL_MODIFY_CHECK;
     tsContainer.Ts = ui->l_ts->text().toDouble();
 }
@@ -105,7 +112,7 @@ void MainWindow::on_l_ref_simple_editingFinished()
     DTRACE("actualizar Referencia simple");
     CONTROL_MODIFY_CHECK;
     // configurar referencia simple
-    refSimple.setFunction(ui->l_ref_simple->text(), "/home/pi/Documents/Files/Internos/simp_fun.m");
+    refSimple.setFunction(ui->l_ref_simple->text(), REF_SIMPLE_DIR);
     refSimple.verificar();
 }
 
@@ -346,6 +353,8 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         }
     }else if(ui->tabWidget->tabText(index) == "Supervision"){
         //dibujar referencia si no esta iniciado
+        ui->g_supervision->rearmar(ui->cb_sensor_ph->isChecked());
+
     }
 }
 
