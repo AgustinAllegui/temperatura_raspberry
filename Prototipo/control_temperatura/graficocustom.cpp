@@ -105,7 +105,7 @@ void GraficoCustom::setRef(QVector<double> referencia_, QVector<double> tiempo_)
     lineaU->data().clear();
     lineaPh->data().clear();
     lineaRef->data().clear();
-    lineaRef->addData(tiempo_, referencia_);
+    lineaRef->setData(tiempo_, referencia_, true);
     replot();
 }
 
