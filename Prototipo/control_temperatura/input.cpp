@@ -49,7 +49,15 @@ double Input_base::read()
     lastValue = reglon.toDouble();
     return lastValue;
 }
+#elif INPUT_VERSION == FROM_SENS
 
+double Input_base::read()
+{
+    DERROR("intento de lectura en Input Base");
+    return -1;
+}
+
+#endif
 
 /*-------------------------------------------------------------------------------
  * Input ph
@@ -57,15 +65,58 @@ double Input_base::read()
 
 Input_ph::Input_ph()
 {
+#if INPUT_VERSION == FROM_TEXT
     direccion = "/home/pi/Documents/Files/Pruebas/ph1.txt";
+#endif
 }
-
-#endif // leer desde texto
 
 
 /*-------------------------------------------------------------------------------
  * Input Termocupla
  */
+
+InputTermocupla::InputTermocupla()
+{
+#if CURRENT_DEVICE == ON_RASPBERRY
+    //inicializar PIN_TERMOCUPLA_CS como salida y setear en alto
+    pinMode(PIN_TERMOCUPLA_CS, OUTPUT);
+    digitalWrite(PIN_TERMOCUPLA_CS, HIGH);
+    //inicializar SPI
+    pinHandler(0, 500000);
+#endif
+}
+
+#if CURRENT_DEVICE == ON_RASPBERRY
+double InputTermocupla::read()
+{
+    DTRACE("lectura termocupla");
+    char lectura[2];
+    digitalWrite(PIN_TERMOCUPLA_CS, LOW);
+    wiringPiSPIDataRW(0, lectura, 2);
+    digitalWrite(PIN_TERMOCUPLA_CS, HIGH);
+
+    if(lectura[1] & 0b00000100){
+        DERROR("termocupla no conectada");
+        return -1;
+    }
+
+    uint16_t lectura16 = 0;
+    lectura16 += lectura[0];
+    lectura16 = lectura16<<8;
+    lectura16 += lectura[1];
+
+    lectura16 &= 0b0111111111111000;
+    lectura16 = lectura16 >>3;
+
+    double temperatura = lectura16;
+    DDEBUG("lectura:" << lectura16);
+    DDEBUG("temperatura:" << temperatura);
+    return temperatura;
+}
+
+#endif
+
+
 
 
 

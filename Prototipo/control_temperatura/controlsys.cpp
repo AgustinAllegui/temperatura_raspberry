@@ -47,7 +47,7 @@ void ControlSys::controlTic()
 
     salida->setOutput(salidaValue);
 
-    emit s_control_data(timeSinceStart, refValue, tempValue, phValue);
+    emit s_control_data(timeSinceStart, refValue, tempValue, salidaValue, phValue);
 
     DDEBUG("t =" << timeSinceStart);
     DDEBUG("t_limite" << duracion);

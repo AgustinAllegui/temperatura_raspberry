@@ -38,7 +38,7 @@ public:
     bool isRuning();
 
 signals:
-    void s_control_data(double t_, double ref_, double temp_, double ph_);
+    void s_control_data(double t_, double ref_, double temp_, double u_, double ph_);
     void s_control_stop();
 
 public slots:

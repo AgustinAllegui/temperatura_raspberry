@@ -68,6 +68,7 @@ private slots:
     void on_l_dir_c_custom_editingFinished();
     void on_sb_future_ref_valueChanged(int arg1);
 
+    void on_timeEdit_duracion_timeChanged(const QTime &time);
     void on_cb_t_final_toggled(bool checked);
     void on_b_usar_t_val_clicked();
 
@@ -80,8 +81,8 @@ private slots:
     void slot_control_ticker_timeout();
     void slot_control_stoped();
 
+    void slot_controlSys_s_control_data(double t_, double ref_, double temp_, double u_, double ph_);
 
-    void on_timeEdit_duracion_timeChanged(const QTime &time);
 
 private:
     Ui::MainWindow *ui;
@@ -92,7 +93,7 @@ private:
     TsContainer tsContainer;
 
     Input_base pt100;
-    Input_base termocupla;
+    InputTermocupla termocupla;
     Input_ph phMeter;
 
     Ref_valores refValores;

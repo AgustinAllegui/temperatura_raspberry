@@ -1,14 +1,33 @@
 #ifndef PINHANDLER_H
 #define PINHANDLER_H
 
+#include "../dev_op.h"
 
-#define ON_RASPBERRY    0
-#define ON_PC           1
+/* definicion de pines
+ */
 
-#ifndef DEVICE_ON
-#define DEVICE_ON ON_PC
+#define PIN_TERMOCUPLA_CS   3
+
+#define PIN_PT100_MOSI      4
+#define PIN_PT100_MISO      5
+#define PIN_PT100_CLK       0
+#define PIN_PT100_CS        2
+
+#define PIN_RELE            7
+
+
+
+#if CURRENT_DEVICE == ON_RASPBERRY
+
+#include <wiringPi.h>
+#include <wiringPiSPI.h>
+
+#elif CURRENT_DEVICE == ON_PC
+
+
 #endif
 
+#include <unistd.h>
 
 
 
@@ -16,8 +35,11 @@ class PinHandler
 {
 public:
     PinHandler();
+    bool spiInit(const int channel_, const int speed_);
 
 private:
+    static bool pinInited;
+    static bool spiCh0Inited;
 
 };
 

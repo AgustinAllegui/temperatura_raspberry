@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_ControlSys_t {
-    QByteArrayData data[9];
-    char stringdata0[71];
+    QByteArrayData data[10];
+    char stringdata0[74];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -35,13 +35,14 @@ QT_MOC_LITERAL(2, 26, 0), // ""
 QT_MOC_LITERAL(3, 27, 2), // "t_"
 QT_MOC_LITERAL(4, 30, 4), // "ref_"
 QT_MOC_LITERAL(5, 35, 5), // "temp_"
-QT_MOC_LITERAL(6, 41, 3), // "ph_"
-QT_MOC_LITERAL(7, 45, 14), // "s_control_stop"
-QT_MOC_LITERAL(8, 60, 10) // "controlTic"
+QT_MOC_LITERAL(6, 41, 2), // "u_"
+QT_MOC_LITERAL(7, 44, 3), // "ph_"
+QT_MOC_LITERAL(8, 48, 14), // "s_control_stop"
+QT_MOC_LITERAL(9, 63, 10) // "controlTic"
 
     },
     "ControlSys\0s_control_data\0\0t_\0ref_\0"
-    "temp_\0ph_\0s_control_stop\0controlTic"
+    "temp_\0u_\0ph_\0s_control_stop\0controlTic"
 };
 #undef QT_MOC_LITERAL
 
@@ -59,14 +60,14 @@ static const uint qt_meta_data_ControlSys[] = {
        2,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    4,   29,    2, 0x06 /* Public */,
-       7,    0,   38,    2, 0x06 /* Public */,
+       1,    5,   29,    2, 0x06 /* Public */,
+       8,    0,   40,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       8,    0,   39,    2, 0x0a /* Public */,
+       9,    0,   41,    2, 0x0a /* Public */,
 
  // signals: parameters
-    QMetaType::Void, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double,    3,    4,    5,    6,
+    QMetaType::Void, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double,    3,    4,    5,    6,    7,
     QMetaType::Void,
 
  // slots: parameters
@@ -81,7 +82,7 @@ void ControlSys::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         ControlSys *_t = static_cast<ControlSys *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->s_control_data((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2])),(*reinterpret_cast< double(*)>(_a[3])),(*reinterpret_cast< double(*)>(_a[4]))); break;
+        case 0: _t->s_control_data((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2])),(*reinterpret_cast< double(*)>(_a[3])),(*reinterpret_cast< double(*)>(_a[4])),(*reinterpret_cast< double(*)>(_a[5]))); break;
         case 1: _t->s_control_stop(); break;
         case 2: _t->controlTic(); break;
         default: ;
@@ -90,7 +91,7 @@ void ControlSys::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         int *result = reinterpret_cast<int *>(_a[0]);
         void **func = reinterpret_cast<void **>(_a[1]);
         {
-            typedef void (ControlSys::*_t)(double , double , double , double );
+            typedef void (ControlSys::*_t)(double , double , double , double , double );
             if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&ControlSys::s_control_data)) {
                 *result = 0;
                 return;
@@ -143,9 +144,9 @@ int ControlSys::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void ControlSys::s_control_data(double _t1, double _t2, double _t3, double _t4)
+void ControlSys::s_control_data(double _t1, double _t2, double _t3, double _t4, double _t5)
 {
-    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)), const_cast<void*>(reinterpret_cast<const void*>(&_t3)), const_cast<void*>(reinterpret_cast<const void*>(&_t4)) };
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)), const_cast<void*>(reinterpret_cast<const void*>(&_t3)), const_cast<void*>(reinterpret_cast<const void*>(&_t4)), const_cast<void*>(reinterpret_cast<const void*>(&_t5)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 

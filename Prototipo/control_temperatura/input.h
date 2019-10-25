@@ -19,13 +19,19 @@
 #define FROM_SENS   1   //extrae los valores desde los sensores
 
 #ifndef INPUT_VERSION
-#define INPUT_VERSION FROM_TEXT
+//#define INPUT_VERSION FROM_TEXT
+#define INPUT_VERSION FROM_SENS
 #endif
 
 #if INPUT_VERSION == FROM_TEXT //interfaz desde texto
     #include <QFile>
     #include <QString>
-#endif  //interfaz desde texto
+
+#elif INPUT_VERSION == FROM_SENS  //interfaz desde pines
+
+#include "Libs/pinhandler.h"
+
+#endif
 
 class Input_base : public QObject
 {
@@ -54,6 +60,19 @@ public:
 
     //interfaz
 //    double read();
+};
+
+class InputTermocupla
+    : public Input_base
+{
+public:
+    InputTermocupla();
+
+#if CURRENT_DEVICE == ON_RASPBERRY
+    double read();
+private:
+    PinHandler pinHandler;
+#endif
 };
 
 
