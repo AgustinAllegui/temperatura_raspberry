@@ -123,10 +123,176 @@ double InputTermocupla::read()
 
 #endif
 
+/*-------------------------------------------------------------------------------
+ * Input PT100
+ */
+
+InputPT100::InputPT100()
+{
+#if CURRENT_DEVICE == ON_RASPBERRY
+    //inicializar pines de comunicacion SPI
+    pinMode(PIN_PT100_MOSI, OUTPUT);
+    pinMode(PIN_PT100_MISO, INPUT);
+    pinMode(PIN_PT100_CLK, OUTPUT);
+    pinMode(PIN_PT100_CS, OUTPUT);
+
+    digitalWrite(PIN_PT100_CLK, LOW);
+    digitalWrite(PIN_PT100_CS, HIGH);
+
+    uint8_t reg0 = leerRegistro(0x00);
+    //configurar para 3 cables
+    reg0 |= 0x10;
+
+    //habilitar alimentacion de PT100 (Bias)
+    reg0 |= 0x80;
+
+    //deshabilitar autoconversion
+    reg0 &= ~0x40;
+
+    escribirRegistro(0x80, reg0);
+
+    limpiarFallas();
+
+#endif
+}
+
+#if CURRENT_DEVICE == ON_RASPBERRY
+
+double InputPT100::read()
+{
+    DTRACE("lectura de PT100");
+
+    limpiarFallas();
+
+    //realizar una lectura (one shot)
+    uint8_t reg0 = leerRegistro(0x00);
+    reg0 |= 0x20;
+    escribirRegistro(0x80, reg0);
+
+    //retardo de 65ms mientras se realiza la medicion
+    delay(65);
+
+    //leer el resultado
+    uint8_t rtdLow, rtdHigh;
+    uint16_t rtd = 0;
+
+    digitalWrite(PIN_PT100_CLK, LOW);
+    digitalWtite(PIN_PT100_CS, LOW);
+    spiTransfer(0x01);
+    rtdHigh = spiTransfer(0xFF);
+    rtdLow = spiTransfer(0xFF);
+    digitalWrite(PIN_PT100_CS, HIGH);
+
+    rtd = rtdHigh;
+    rtd <<= 8;
+    DDEBUG(QString("lectura de registros 0x%1").arg(rtd,4,16,QLatin1Char('0')));
+
+    rtd |= rtdLow;
+
+
+    rtd >>= 1;  //quitar falla de lectura
+
+    //convertir lectura en temperatura
+    double Rt = rtd;
+    Rt /= 32768;
+    Rt *= PT100_R_REF;
+
+    double Z1 = -PT100_RTD_A;
+    double Z2 = PT100_RTD_A * PT100_RTD_A - (4 * PT100_RTD_B);
+    double Z3 = (4 * PT100_RTD_B) / PT100_R_NOMINAL;
+    double Z4 = 2 * PT100_RTD_B;
+
+    double temperatura = Z2 + (Z3 * Rt);
+    temperatura = (sqrt(temp) + Z1) / Z4;
+
+    DDEBUG("temperatura 1" << temperatura);
+    if(temperatura >= 0){
+        return temperatura;
+    }
+
+    //ugh (?)
+    Rt /= PT100_R_NOMINAL;
+    Rt *= 100;
+
+    double rpoly = Rt;
+
+    temperatura = -242.02;
+    temperatura += 2.2228 * rpoly;
+    rpoly *= Rt;  // square
+    temperatura += 2.5859e-3 * rpoly;
+    rpoly *= Rt;  // ^3
+    temperatura -= 4.8260e-6 * rpoly;
+    rpoly *= Rt;  // ^4
+    temperatura -= 2.8183e-8 * rpoly;
+    rpoly *= Rt;  // ^5
+    temperatura += 1.5243e-10 * rpoly;
+
+    DDEBUG("temperatura 2" << temperatura);
+    return temperatura;
+
+}
 
 
 
+uint8_t InputPT100::spiTransfer(uint8_t data)
+{
+    uint8_t reply = 0;
+
+    for(int i = 7; i>=0;  i--){
+        reply <<=1;
+        digitalWrite(PIN_PT100_CLK, HIGH);
+        digitalWrite(PIN_PT100_MOSI, data&(1<<i));
+        digitalWrite(PIN_PT100_CLK, LOW);
+        if(digitalRead(PIN_PT100_MISO)){
+            reply |= 1;
+        }
+    }
+    return reply;
+}
 
 
+uint8_t InputPT100::leerRegistro(uint8_t direccion)
+{
+    direccion &= 0x7F;
+
+    digitalWrite(PIN_PT100_CLK, LOW);
+    digitalWrite(PIN_PT100_CS, LOW);
+
+    spiTransfer(direccion);
+    uint8_t respuesta = spiTransfer(0xFF);
+
+    digitalWrite(PIN_PT100_CS, HIGH);
+
+    return respuesta;
+}
+
+void InputPT100::escribirRegistro(uint8_t direccion, uint8_t valor)
+{
+    direccion |= 0x80;
+
+    digitalWrite(PIN_PT100_CLK, LOW);
+    digitalWrite(PIN_PT100_CS, LOW);
+
+    spiTransfer(direccion);
+    spiTransfer(valor);
+
+    digitalWrite(PIN_PT100_CS, HIGH);
+}
+
+void InputPT100::limpiarFallas()
+{
+    uint8_t t = leerRegistro(0x00);
+    t &= ~0x2C;
+    t |= 0x02;
+    escribirRegistro(0x00, t);
+}
+
+uint8_t InputPT100::leerFalla()
+{
+    return leerRegistro(0x07);
+}
+
+
+#endif
 
 

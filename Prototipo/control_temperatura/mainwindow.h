@@ -92,7 +92,7 @@ private:
 
     TsContainer tsContainer;
 
-    Input_base pt100;
+    InputPT100 pt100;
     InputTermocupla termocupla;
     Input_ph phMeter;
 

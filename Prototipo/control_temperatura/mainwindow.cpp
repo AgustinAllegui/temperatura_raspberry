@@ -484,8 +484,8 @@ void MainWindow::on_b_detener_clicked()
 
 void MainWindow::slot_entradas_ticker_timeout()
 {
-//    pt100.read();
-    termocupla.read();
+    pt100.read();
+//    termocupla.read();
 }
 
 void MainWindow::slot_control_ticker_timeout()

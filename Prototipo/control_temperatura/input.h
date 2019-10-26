@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QDebug>
 #include "dev_op.h"
+#include <math.h>
 
 /* Esta clase hace de interfaz con los sensores del sistema
  *
@@ -72,6 +73,30 @@ public:
     double read();
 private:
     PinHandler pinHandler;
+#endif
+};
+
+class InputPT100
+    : public InputPT100
+{
+public:
+    InputPT100();
+
+#if CURRENT_DEVICE == ON_RASPBERRY
+    double read();
+
+private:
+    PinHandler pinHandler;
+
+    void limpiarFallas();
+    uint8_t leerFalla();
+
+    uint8_t leerRegistro(uint8_t direccion);
+    void escribirRegistro(uint8_t direccion, uint8_t valor);
+
+    uint8_t spiTransfer(uint8_t data);
+
+    int pinMosi, pinMiso, pinClk, pinCs;
 #endif
 };
 
