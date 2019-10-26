@@ -59,10 +59,10 @@ INCLUDEPATH += "/usr/include/octave-4.0.3/octave"
 INCLUDEPATH += "/usr/include/octave-4.0.3/octave/.."
 
 #habilitar para compilar en PC
-LIBS += "/usr/lib/i386-linux-gnu/liboctinterp.so"
-LIBS += "/usr/lib/i386-linux-gnu/liboctave.so"
+#LIBS += "/usr/lib/i386-linux-gnu/liboctinterp.so"
+#LIBS += "/usr/lib/i386-linux-gnu/liboctave.so"
 
 #habilitar para compilar en raspberry
-#LIBS += "/usr/lib/arm-linux-gnueabihf/liboctave.so"
-#LIBS += "/usr/lib/arm-linux-gnueabihf/liboctinterp.so"
-#LIBS += -L/usr/lib -lwiringPi
+LIBS += "/usr/lib/arm-linux-gnueabihf/liboctave.so"
+LIBS += "/usr/lib/arm-linux-gnueabihf/liboctinterp.so"
+LIBS += -L/usr/lib -lwiringPi

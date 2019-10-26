@@ -6,13 +6,13 @@ bool PinHandler::spiCh0Inited = false;
 PinHandler::PinHandler()
 {
 #if CURRENT_DEVICE == ON_RASPBERRY
-    if(getuid() == geteuid()){
-        DERROR("el programa se debe ejecutar con SUDO");
-        return;
-    }
+//    if(getuid() == geteuid()){
+//        DERROR("el programa se debe ejecutar con SUDO");
+//        return;
+//    }
 
     if(!pinInited){
-        wiringPiSetupSys();
+        wiringPiSetup();
         pinInited = true;
     }
 #endif

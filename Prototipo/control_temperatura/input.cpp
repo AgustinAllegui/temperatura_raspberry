@@ -82,7 +82,7 @@ InputTermocupla::InputTermocupla()
     pinMode(PIN_TERMOCUPLA_CS, OUTPUT);
     digitalWrite(PIN_TERMOCUPLA_CS, HIGH);
     //inicializar SPI
-    pinHandler(0, 500000);
+    pinHandler.spiInit(0, 500000);
 #endif
 }
 
@@ -90,10 +90,12 @@ InputTermocupla::InputTermocupla()
 double InputTermocupla::read()
 {
     DTRACE("lectura termocupla");
-    char lectura[2];
+    unsigned char lectura[2];
     digitalWrite(PIN_TERMOCUPLA_CS, LOW);
     wiringPiSPIDataRW(0, lectura, 2);
     digitalWrite(PIN_TERMOCUPLA_CS, HIGH);
+
+    DDEBUG(QString("lectura crudo %1 %2").arg(lectura[0],8,2,QLatin1Char('0')).arg(lectura[1],8,2,QLatin1Char('0')));
 
     if(lectura[1] & 0b00000100){
         DERROR("termocupla no conectada");
@@ -105,11 +107,16 @@ double InputTermocupla::read()
     lectura16 = lectura16<<8;
     lectura16 += lectura[1];
 
+    DDEBUG(QString("lectura junta %1").arg(lectura16,16,2,QLatin1Char('0')));
+
     lectura16 &= 0b0111111111111000;
     lectura16 = lectura16 >>3;
+    DDEBUG(QString("lectura uint16_t %1").arg(lectura16,16,2,QLatin1Char('0')));
 
     double temperatura = lectura16;
     DDEBUG("lectura:" << lectura16);
+    DDEBUG("temperatura:" << temperatura);
+    temperatura = temperatura/4;
     DDEBUG("temperatura:" << temperatura);
     return temperatura;
 }

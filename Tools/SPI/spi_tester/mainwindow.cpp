@@ -58,7 +58,7 @@ void MainWindow::on_b_enviar_clicked()
     DDEBUG("velocidad" << velocidad);
 
 #if CURRENT_PC == PC_RASPBERRY_PI
-    if(wiringPiSPISetup(canal, velocidad) == -1){
+    if(wiringPiSPISetupMode(canal, velocidad, 1) == -1){
         DLOG("no se pudo configurar el canal");
         return;
     }

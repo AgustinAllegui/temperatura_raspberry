@@ -9,8 +9,8 @@
 #define ON_PC           1
 
 #ifndef CURRENT_DEVICE
-//#define CURRENT_DEVICE  ON_RASPBERRY
-#define CURRENT_DEVICE  ON_PC
+#define CURRENT_DEVICE  ON_RASPBERRY
+//#define CURRENT_DEVICE  ON_PC
 #endif
 
 #if CURRENT_DEVICE == ON_PC
@@ -21,8 +21,8 @@
 
 #elif CURRENT_DEVICE == ON_RASPBERRY
 
-#define REF_SIMPLE_DIR  "/home/pi/Documents/temperatura_raspberry/Files/Internos/PID_rbp.m"
-#define PID_DIR         "/home/pi/Documents/temperatura_raspberry/Files/Internos/simp_fun.m"
+#define REF_SIMPLE_DIR  "/home/pi/Documents/control_temperatura/temperatura_raspberry/Files/Internos/simp_fun.m"
+#define PID_DIR         "/home/pi/Documents/control_temperatura/temperatura_raspberry/Files/Internos/PID_rbp.m"
 
 #endif
 
