@@ -77,7 +77,7 @@ private:
 };
 
 class InputPT100
-    : public InputPT100
+    : public Input_base
 {
 public:
     InputPT100();

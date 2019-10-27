@@ -177,7 +177,7 @@ double InputPT100::read()
     uint16_t rtd = 0;
 
     digitalWrite(PIN_PT100_CLK, LOW);
-    digitalWtite(PIN_PT100_CS, LOW);
+    digitalWrite(PIN_PT100_CS, LOW);
     spiTransfer(0x01);
     rtdHigh = spiTransfer(0xFF);
     rtdLow = spiTransfer(0xFF);
@@ -185,7 +185,7 @@ double InputPT100::read()
 
     rtd = rtdHigh;
     rtd <<= 8;
-    DDEBUG(QString("lectura de registros 0x%1").arg(rtd,4,16,QLatin1Char('0')));
+    DDEBUG("lectura de registros" << rtd);
 
     rtd |= rtdLow;
 
@@ -203,7 +203,7 @@ double InputPT100::read()
     double Z4 = 2 * PT100_RTD_B;
 
     double temperatura = Z2 + (Z3 * Rt);
-    temperatura = (sqrt(temp) + Z1) / Z4;
+    temperatura = (sqrt(temperatura) + Z1) / Z4;
 
     DDEBUG("temperatura 1" << temperatura);
     if(temperatura >= 0){
