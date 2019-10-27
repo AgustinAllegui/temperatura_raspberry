@@ -1,11 +1,12 @@
 #include "input.h"
 
 Input_base::Input_base()
-#if INPUT_VERSION == FROM_TEXT
-    : direccion("/home/pi/Documents/Files/Pruebas/entrada_seno.txt")
-#endif
 {
 
+#if CURRENT_DEVICE == ON_PC
+    direccion = ENTRADA_FILE_DIR;
+#endif
+    lastValue = 0;
 }
 
 double Input_base::readLast()
@@ -14,7 +15,7 @@ double Input_base::readLast()
 }
 
 //leer desde texto
-#if INPUT_VERSION == FROM_TEXT
+#if CURRENT_DEVICE == ON_PC
 
 /*leer del archivo pt100.txt
  */
@@ -23,7 +24,7 @@ double Input_base::read()
 //    DTRACE("input read from text");
     QFile archivo(direccion);
     if(!archivo.open(QFile::ReadOnly)){
-        DERROR("no se pudo abrir archivo pt100");
+        DERROR("no se pudo abrir archivo de lectura");
         return -1;
     }
 
@@ -49,11 +50,12 @@ double Input_base::read()
     lastValue = reglon.toDouble();
     return lastValue;
 }
-#elif INPUT_VERSION == FROM_SENS
+#elif CURRENT_DEVICE == ON_RASPBERRY
 
 double Input_base::read()
 {
     DERROR("intento de lectura en Input Base");
+    lastValue = -1;
     return -1;
 }
 
@@ -65,9 +67,15 @@ double Input_base::read()
 
 Input_ph::Input_ph()
 {
-#if INPUT_VERSION == FROM_TEXT
+#if CURRENT_DEVICE == ON_PC
     direccion = "/home/pi/Documents/Files/Pruebas/ph1.txt";
 #endif
+}
+
+double Input_ph::read()
+{
+    lastValue = -1;
+    return 7;
 }
 
 
@@ -95,7 +103,7 @@ double InputTermocupla::read()
     wiringPiSPIDataRW(0, lectura, 2);
     digitalWrite(PIN_TERMOCUPLA_CS, HIGH);
 
-    DDEBUG(QString("lectura crudo %1 %2").arg(lectura[0],8,2,QLatin1Char('0')).arg(lectura[1],8,2,QLatin1Char('0')));
+//    DDEBUG(QString("lectura crudo %1 %2").arg(lectura[0],8,2,QLatin1Char('0')).arg(lectura[1],8,2,QLatin1Char('0')));
 
     if(lectura[1] & 0b00000100){
         DERROR("termocupla no conectada");
@@ -107,17 +115,19 @@ double InputTermocupla::read()
     lectura16 = lectura16<<8;
     lectura16 += lectura[1];
 
-    DDEBUG(QString("lectura junta %1").arg(lectura16,16,2,QLatin1Char('0')));
+//    DDEBUG(QString("lectura junta %1").arg(lectura16,16,2,QLatin1Char('0')));
 
     lectura16 &= 0b0111111111111000;
     lectura16 = lectura16 >>3;
-    DDEBUG(QString("lectura uint16_t %1").arg(lectura16,16,2,QLatin1Char('0')));
+//    DDEBUG(QString("lectura uint16_t %1").arg(lectura16,16,2,QLatin1Char('0')));
 
     double temperatura = lectura16;
-    DDEBUG("lectura:" << lectura16);
-    DDEBUG("temperatura:" << temperatura);
+//    DDEBUG("lectura:" << lectura16);
+//    DDEBUG("temperatura:" << temperatura);
     temperatura = temperatura/4;
     DDEBUG("temperatura:" << temperatura);
+
+    lastValue = temperatura;
     return temperatura;
 }
 
@@ -185,7 +195,7 @@ double InputPT100::read()
 
     rtd = rtdHigh;
     rtd <<= 8;
-    DDEBUG("lectura de registros" << rtd);
+//    DDEBUG("lectura de registros" << rtd);
 
     rtd |= rtdLow;
 
@@ -207,6 +217,7 @@ double InputPT100::read()
 
     DDEBUG("temperatura 1" << temperatura);
     if(temperatura >= 0){
+        lastValue = temperatura;
         return temperatura;
     }
 
@@ -228,6 +239,7 @@ double InputPT100::read()
     temperatura += 1.5243e-10 * rpoly;
 
     DDEBUG("temperatura 2" << temperatura);
+    lastValue = temperatura;
     return temperatura;
 
 }

@@ -16,19 +16,12 @@
  * de estado de la interfaz
  */
 
-#define FROM_TEXT   0   //extrae los valores desde un archivo de texto
-#define FROM_SENS   1   //extrae los valores desde los sensores
 
-#ifndef INPUT_VERSION
-//#define INPUT_VERSION FROM_TEXT
-#define INPUT_VERSION FROM_SENS
-#endif
-
-#if INPUT_VERSION == FROM_TEXT //interfaz desde texto
+#if CURRENT_DEVICE == ON_PC //interfaz desde texto
     #include <QFile>
     #include <QString>
 
-#elif INPUT_VERSION == FROM_SENS  //interfaz desde pines
+#elif CURRENT_DEVICE == ON_RASPBERRY  //interfaz desde pines
 
 #include "Libs/pinhandler.h"
 
@@ -47,7 +40,7 @@ public:
 protected:
     double lastValue;
 
-#if INPUT_VERSION == FROM_TEXT
+#if CURRENT_DEVICE == ON_PC
     QString direccion;
 #endif
 
@@ -60,7 +53,7 @@ public:
     Input_ph();
 
     //interfaz
-//    double read();
+    double read();
 };
 
 class InputTermocupla
@@ -71,6 +64,10 @@ public:
 
 #if CURRENT_DEVICE == ON_RASPBERRY
     double read();
+
+signals:
+    void s_inputTermocupla_read(double temperatura_);
+
 private:
     PinHandler pinHandler;
 #endif
@@ -84,6 +81,10 @@ public:
 
 #if CURRENT_DEVICE == ON_RASPBERRY
     double read();
+
+signals:
+    void s_inputPT100_read(double temperatura_);
+
 
 private:
     PinHandler pinHandler;

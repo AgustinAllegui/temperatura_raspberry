@@ -2,25 +2,36 @@
 #define DEV_OP_H
 
 //--------------------------------------------------------------------------------------------
-/*  configuracion de direcciones para los archivos internos
+/*  configuracion del dispositivo actual
  */
 
 #define ON_RASPBERRY    0
 #define ON_PC           1
 
 #ifndef CURRENT_DEVICE
-#define CURRENT_DEVICE  ON_RASPBERRY
-//#define CURRENT_DEVICE  ON_PC
+//#define CURRENT_DEVICE  ON_RASPBERRY
+#define CURRENT_DEVICE  ON_PC
 #endif
+
+//--------------------------------------------------------------------------------------------
+/*  configuracion de direcciones para los archivos
+ */
+
 
 #if CURRENT_DEVICE == ON_PC
 
+//archivos de funcionamiento interno
 #define PID_DIR         "/home/pi/Documents/temperatura_raspberry/Files/Internos/PID_rbp.m"
 #define REF_SIMPLE_DIR  "/home/pi/Documents/temperatura_raspberry/Files/Internos/simp_fun.m"
+
+//archivos entrada y salida para pruebas
+#define ENTRADA_FILE_DIR "/home/pi/Documents/temperatura_raspberry/Files/Pruebas/entrada_seno.txt"
+#define SALIDA_FILE_DIR "/home/pi/Documents/temperatura_raspberry/Files/Pruebas/salida.txt"
 
 
 #elif CURRENT_DEVICE == ON_RASPBERRY
 
+//archivos de funcionamiento interno
 #define REF_SIMPLE_DIR  "/home/pi/Documents/control_temperatura/temperatura_raspberry/Files/Internos/simp_fun.m"
 #define PID_DIR         "/home/pi/Documents/control_temperatura/temperatura_raspberry/Files/Internos/PID_rbp.m"
 

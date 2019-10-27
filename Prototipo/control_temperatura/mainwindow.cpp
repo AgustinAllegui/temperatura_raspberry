@@ -22,13 +22,15 @@ MainWindow::~MainWindow()
 void MainWindow::doConections()
 {
     //tickers
-    control_ticker.setTimerType(Qt::PreciseTimer);
     connect(&entradas_ticker, SIGNAL(timeout()), this, SLOT(slot_entradas_ticker_timeout()));
-    connect(&control_ticker, SIGNAL(timeout()), this, SLOT(slot_control_ticker_timeout()));
     entradas_ticker.start(entrada_refresh_time);
 
+    control_ticker.setTimerType(Qt::PreciseTimer);
+    connect(&control_ticker, SIGNAL(timeout()), this, SLOT(slot_control_ticker_timeout()));
+
     //control tic
-    connect(&controlSys, SIGNAL(s_control_data(double,double,double,double)), this, SLOT(slot_controlSys_s_control_data(double,double,double,double)));
+    connect(&controlSys, SIGNAL(s_control_data(double t_, double ref_, double temp_, double u_, double ph_)),
+            this, SLOT(slot_controlSys_s_control_data(double t_, double ref_, double temp_, double u_, double ph_)));
 
     //control end
     connect(&controlSys, SIGNAL(s_control_stop()), this, SLOT(slot_control_stoped()));
@@ -485,7 +487,7 @@ void MainWindow::on_b_detener_clicked()
 void MainWindow::slot_entradas_ticker_timeout()
 {
     pt100.read();
-//    termocupla.read();
+    termocupla.read();
 }
 
 void MainWindow::slot_control_ticker_timeout()
