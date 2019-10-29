@@ -12,11 +12,15 @@ public:
     ~GraficoCustom();
 
     //interfaz
+    void limpiar();
     void rearmar(const bool phFlag_);
 
     void setRef(QVector<double> referencia_, QVector<double> tiempo_);
     void addPoint(const double t_, const double referencia_, const double temperatura_, const double u_);
     void addPhPoint(const double t_, const double ph_);
+
+    void showAll(QVector<double> tiempo, QVector<double> referencia, QVector<double> temperatura, QVector<double> u, QVector<double> ph);
+    void showAll(QVector<double> tiempo, QVector<double> referencia, QVector<double> temperatura, QVector<double> u);
 
 
 private:

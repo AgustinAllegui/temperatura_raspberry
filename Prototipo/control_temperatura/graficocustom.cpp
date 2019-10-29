@@ -73,7 +73,7 @@ GraficoCustom::~GraficoCustom()
 
 }
 
-/*  limpia los datos de las lineas y pone y saca el grafico de ph
+/*  pone y saca el grafico de ph
  */
 void GraficoCustom::rearmar(const bool phFlag_)
 {
@@ -98,16 +98,24 @@ void GraficoCustom::rearmar(const bool phFlag_)
     replot();
 }
 
+/* limpia los datos de las lineas
+ */
+void GraficoCustom::limpiar()
+{
+    lineaTemp->data().data()->clear();
+    lineaU->data().data()->clear();
+    lineaPh->data().data()->clear();
+    lineaRef->data().data()->clear();
+    replot();
+}
+
 
 /*  borra los datos de todas las lineas e inserta la linea de referencia en el grafico de temperatura
  */
 void GraficoCustom::setRef(QVector<double> referencia_, QVector<double> tiempo_)
 {
     DTRACE("dibujar referencia inicial");
-    lineaTemp->data().clear();
-    lineaU->data().clear();
-    lineaPh->data().clear();
-    lineaRef->data().clear();
+    limpiar();
     lineaRef->setData(tiempo_, referencia_, true);
     reescalar();
     replot();
@@ -137,5 +145,31 @@ void GraficoCustom::reescalar()
     rescaleAxes();
     lineaU->keyAxis()->setRange(lineaRef->keyAxis()->range());
     lineaPh->keyAxis()->setRange(lineaRef->keyAxis()->range());
+    replot();
 }
+
+
+
+/*  mostrar todos todos los datos en el grafico
+ */
+void GraficoCustom::showAll(QVector<double> tiempo, QVector<double> referencia, QVector<double> temperatura, QVector<double> u)
+{
+    DTRACE("mostrar todo en grafico");
+    rearmar(false);
+    DDEBUG("largo de tiempo" << tiempo.length());
+    DDEBUG("tiempo" << tiempo);
+    lineaRef->setData(tiempo, referencia);
+    lineaTemp->setData(tiempo, temperatura);
+    lineaU->setData(tiempo, u);
+    reescalar();
+}
+
+void GraficoCustom::showAll(QVector<double> tiempo, QVector<double> referencia, QVector<double> temperatura, QVector<double> u, QVector<double> ph)
+{
+    DTRACE("mostrar todo en grafico con ph");
+    showAll(tiempo, referencia, temperatura, u);
+    lineaPh->setData(tiempo, ph);
+    reescalar();
+}
+
 

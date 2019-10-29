@@ -14,6 +14,7 @@
 #include "input.h"
 #include "referencia.h"
 #include "output_rele.h"
+#include "logger.h"
 
 
 #define CONTROL_MODIFY_CHECK do{                                                                                                \
@@ -107,6 +108,8 @@ private:
     Algoritmo_pid algoritmoPID;
 
     Output_rele OutRele;
+
+    Logger logger;
 
     //timers
     QTimer entradas_ticker;

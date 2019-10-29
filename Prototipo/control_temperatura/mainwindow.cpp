@@ -29,8 +29,8 @@ void MainWindow::doConections()
     connect(&control_ticker, SIGNAL(timeout()), this, SLOT(slot_control_ticker_timeout()));
 
     //control tic
-    connect(&controlSys, SIGNAL(s_control_data(double t_, double ref_, double temp_, double u_, double ph_)),
-            this, SLOT(slot_controlSys_s_control_data(double t_, double ref_, double temp_, double u_, double ph_)));
+    connect(&controlSys, SIGNAL(s_control_data(double, double, double, double, double)),
+            this, SLOT(slot_controlSys_s_control_data(double, double, double, double, double)));
 
     //control end
     connect(&controlSys, SIGNAL(s_control_stop()), this, SLOT(slot_control_stoped()));
@@ -463,6 +463,8 @@ void MainWindow::on_b_iniciar_clicked()
         controlSys.sensor = &termocupla;
     }
 
+    logger.clear();
+
     if(!controlSys.controlStart()){
         DLOG("sistema de control no iniciado");
         QMessageBox mensajeError;
@@ -508,6 +510,14 @@ void MainWindow::slot_control_stoped()
     entradas_ticker.start(entrada_refresh_time);
     ui->b_detener->setEnabled(false);
     ui->b_iniciar->setEnabled(true);
+
+    ui->g_resultados->limpiar();
+    if(controlSys.algoritmo->getPh_flag()){
+        ui->g_resultados->showAll(logger.getTiempo(), logger.getRef(), logger.getTemperatura(), logger.getU(), logger.getPh());
+    }else{
+        ui->g_resultados->showAll(logger.getTiempo(), logger.getRef(), logger.getTemperatura(), logger.getU());
+    }
+
 }
 
 void MainWindow::slot_controlSys_s_control_data(double t_, double ref_, double temp_, double u_, double ph_)
@@ -519,6 +529,7 @@ void MainWindow::slot_controlSys_s_control_data(double t_, double ref_, double t
     ui->g_supervision->addPoint(t_, ref_, temp_, u_);
 
     //agregar al log
+    logger.addPoint(t_, ref_, temp_, u_, ph_);
 }
 
 

@@ -4,7 +4,7 @@ Output_rele::Output_rele()
     : output_value(0)
     , n_Ts(1)
 #if OUTPUT_VERSION == TO_TEXT
-    , direccion("/home/pi/Documents/Files/Pruebas/salida.txt")
+    , direccion(SALIDA_FILE_DIR)
 #endif
 {
 

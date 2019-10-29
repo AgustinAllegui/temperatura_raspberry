@@ -75,6 +75,7 @@ void Logger::addPoint(double t_, double ref_, double temp_, double u_, double ph
  */
 QVector<double> Logger::getColumna(const int columna_)
 {
+    DTRACE("logger Get Columna" << columna_);
     QVector<double> respuesta;
     QStringList reglon;
     QFile archivo(direccionBuffer);
