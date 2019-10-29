@@ -82,6 +82,9 @@ private slots:
     void slot_control_stoped();
 
     void slot_controlSys_s_control_data(double t_, double ref_, double temp_, double u_, double ph_);
+    
+    void slot_lecturaPT100(double temperatura);
+    void slot_lecturaTermocupla(double temperatura);
 
 
 private:

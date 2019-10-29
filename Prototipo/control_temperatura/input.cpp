@@ -128,6 +128,7 @@ double InputTermocupla::read()
     DDEBUG("temperatura:" << temperatura);
 
     lastValue = temperatura;
+    emit s_inputTermocupla_read(temperatura);
     return temperatura;
 }
 
@@ -218,6 +219,7 @@ double InputPT100::read()
     DDEBUG("temperatura 1" << temperatura);
     if(temperatura >= 0){
         lastValue = temperatura;
+        emit s_inputPT100_read(temperatura);
         return temperatura;
     }
 
@@ -240,6 +242,7 @@ double InputPT100::read()
 
     DDEBUG("temperatura 2" << temperatura);
     lastValue = temperatura;
+    emit s_inputPT100_read(temperatura);
     return temperatura;
 
 }

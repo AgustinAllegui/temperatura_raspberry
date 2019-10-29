@@ -4,4 +4,4 @@ Prototipo/build-Control_temperatura-Desktop-Debug/
 
 #ignorar el archivo .pro.user para el cambio de dispositivo
 
-Prototipo/control_temperatura/Control_temperatura.pro.user
+*.pro.user

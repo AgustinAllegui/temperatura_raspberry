@@ -23,6 +23,7 @@
 //archivos de funcionamiento interno
 #define PID_DIR         "/home/pi/Documents/temperatura_raspberry/Files/Internos/PID_rbp.m"
 #define REF_SIMPLE_DIR  "/home/pi/Documents/temperatura_raspberry/Files/Internos/simp_fun.m"
+#define LOG_BUFFER_DIR  "/home/pi/Documents/temperatura_raspberry/Files/Internos/log_buffer.txt"
 
 //archivos entrada y salida para pruebas
 #define ENTRADA_FILE_DIR "/home/pi/Documents/temperatura_raspberry/Files/Pruebas/entrada_seno.txt"
@@ -34,6 +35,7 @@
 //archivos de funcionamiento interno
 #define REF_SIMPLE_DIR  "/home/pi/Documents/control_temperatura/temperatura_raspberry/Files/Internos/simp_fun.m"
 #define PID_DIR         "/home/pi/Documents/control_temperatura/temperatura_raspberry/Files/Internos/PID_rbp.m"
+#define LOG_BUFFER_DIR  "/home/pi/Documents/control_temperatura/temperatura_raspberry/Files/Internos/log_buffer.txt"
 
 #endif
 
@@ -83,7 +85,7 @@
 #endif
 
 
-#define DERROR(A) qDebug() << "-Error:" << A << "\t[" << __FILE__ << __LINE__ <<']'
+#define DERROR(A) qDebug() << "---Error:" << A << "\t[" << __FILE__ << __LINE__ <<']'
 
 
 #endif // DEV_OP_H

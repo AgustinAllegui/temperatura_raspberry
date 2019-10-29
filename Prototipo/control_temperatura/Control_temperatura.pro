@@ -34,7 +34,8 @@ SOURCES += main.cpp\
     output_rele.cpp \
     Libs/qcustomplot.cpp \
     graficocustom.cpp \
-    Libs/pinhandler.cpp
+    Libs/pinhandler.cpp \
+    logger.cpp
 
 HEADERS  += mainwindow.h \
     tscontainer.h \
@@ -47,7 +48,8 @@ HEADERS  += mainwindow.h \
     dev_op.h \
     Libs/qcustomplot.h \
     graficocustom.h \
-    Libs/pinhandler.h
+    Libs/pinhandler.h \
+    logger.h
 
 FORMS    += mainwindow.ui
 

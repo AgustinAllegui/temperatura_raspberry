@@ -34,6 +34,13 @@ void MainWindow::doConections()
 
     //control end
     connect(&controlSys, SIGNAL(s_control_stop()), this, SLOT(slot_control_stoped()));
+
+    //conectar lectura de sensores a mensajes en pantalla
+#if CURRENT_DEVICE == ON_RASPBERRY
+    connect(&pt100, SIGNAL(s_inputPT100_read(double)), this, SLOT(slot_lecturaPT100(double)));
+    connect(&termocupla, SIGNAL(s_inputTermocupla_read(double)), this, SLOT(slot_lecturaTermocupla(double)));
+#endif
+
 }
 
 void MainWindow::setInitialValues()
@@ -512,4 +519,15 @@ void MainWindow::slot_controlSys_s_control_data(double t_, double ref_, double t
     ui->g_supervision->addPoint(t_, ref_, temp_, u_);
 
     //agregar al log
+}
+
+
+void MainWindow::slot_lecturaPT100(double temperatura)
+{
+    ui->label_pt100_value->setText(QString::number(temperatura, 'g', 2).append("°C"));
+}
+
+void MainWindow::slot_lecturaTermocupla(double temperatura)
+{
+    ui->label_term_value->setText(QString::number(temperatura, 'g', 2).append("°C"));
 }
