@@ -478,6 +478,12 @@ void MainWindow::on_b_iniciar_clicked()
     DLOG("sistema de control iniciado");
 
     ui->b_detener->setEnabled(true);
+    ui->tab_ts->setEnabled(false);
+    ui->tab_tiempo->setEnabled(false);
+    ui->tab_sensor->setEnabled(false);
+    ui->tab_resultados->setEnabled(false);
+    ui->tab_referencia->setEnabled(false);
+    ui->tab_controlador->setEnabled(false);
     //detener el timer de lectura
     entradas_ticker.stop();
     //iniciar el timer
@@ -511,6 +517,13 @@ void MainWindow::slot_control_stoped()
     ui->b_detener->setEnabled(false);
     ui->b_iniciar->setEnabled(true);
 
+    ui->tab_ts->setEnabled(true);
+    ui->tab_tiempo->setEnabled(true);
+    ui->tab_sensor->setEnabled(true);
+    ui->tab_resultados->setEnabled(true);
+    ui->tab_referencia->setEnabled(true);
+    ui->tab_controlador->setEnabled(true);
+
     ui->g_resultados->limpiar();
     if(controlSys.algoritmo->getPh_flag()){
         ui->g_resultados->showAll(logger.getTiempo(), logger.getRef(), logger.getTemperatura(), logger.getU(), logger.getPh());
@@ -541,4 +554,10 @@ void MainWindow::slot_lecturaPT100(double temperatura)
 void MainWindow::slot_lecturaTermocupla(double temperatura)
 {
     ui->label_term_value->setText(QString::number(temperatura, 'g', 2).append("°C"));
+}
+
+void MainWindow::on_b_exportar_clicked()
+{
+    QString fileDir = QFileDialog::getSaveFileName(this, tr("guardar datos del ensayo"), "~/", tr("Texto (*.txt);;Valores separados por coma (*.csv);;Archivo de valores de MatLab (*.mat)"));
+    logger.saveFile(fileDir, controlSys.algoritmo->getPh_flag());
 }

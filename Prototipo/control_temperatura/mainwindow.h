@@ -88,6 +88,8 @@ private slots:
     void slot_lecturaTermocupla(double temperatura);
 
 
+    void on_b_exportar_clicked();
+
 private:
     Ui::MainWindow *ui;
 

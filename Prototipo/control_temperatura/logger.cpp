@@ -184,6 +184,57 @@ void Logger::saveMat(QString direccion_, const bool phFlag)
 {
     DTRACE("guardar archivo .mat");
     //llamar a funcion de octave que guarda los datos
+    // /home/pi/Documents/temperatura_raspberry/Files/Internos/guardarMat.m
+    QFile dirOut(LOG_DIR_OUT_M);
+    QFile dirIn(LOG_DIR_IN_M);
+
+    //setear el archivo de direccion de salida
+    if(dirOut.exists()){
+        dirOut.remove();
+    }
+
+    if(!dirOut.open(QFile::WriteOnly | QFile::Append)){
+        DERROR("no se pudo generar el archivo");
+        dirOut.close();
+        return;
+    }
+
+    dirOut.write(QByteArray().append("dirOut = '"));
+    dirOut.write(QByteArray().append(direccion_ + "';"));
+    dirOut.close();
+
+    //setear el archivo de direccion de entrada
+    if(dirIn.exists()){
+        dirIn.remove();
+    }
+
+    if(!dirIn.open(QFile::WriteOnly | QFile::Append)){
+        DERROR("no se pudo generar el archivo");
+        dirIn.close();
+        return;
+    }
+
+    dirIn.write(QByteArray().append("dirIn = '"));
+    dirIn.write(QByteArray().append(LOG_BUFFER_DIR));
+    dirIn.write(QByteArray().append("';"));
+    dirIn.close();
+
+
+    //ejecutar funcion que genera el archivo .mat
+
+    QString funDir = LOG_FUN_MAT;
+    std::string std_fileDir = funDir.toStdString();
+    octave_function *funcion = load_fcn_from_file(std_fileDir);
+
+    octave_value_list entrada_list;
+    if(phFlag){
+        entrada_list(0) = 1;
+    }else{
+        entrada_list(0) = 0;
+    }
+
+    feval(funcion, entrada_list, 1);
+
 }
 
 

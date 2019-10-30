@@ -1,0 +1,1 @@
+dirOut = '/home/pi/Documents/Files/ddd.mat';

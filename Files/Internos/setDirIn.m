@@ -1,0 +1,1 @@
+dirIn = '/home/pi/Documents/temperatura_raspberry/Files/Internos/log_buffer.txt';

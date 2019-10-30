@@ -216,7 +216,7 @@ void Ref_funcionC::setFile(QString fileDir_)
 
 double Ref_funcionC::getRef(const double t_)
 {
-    DTRACE("get ref funcion" << TsContainer::Ts << t_);
+//    DTRACE("get ref funcion" << TsContainer::Ts << t_);
     //calcular y retornar el siguiente valor para t = t_
     std::string std_fileDir = fileDir.toStdString();
     octave_function *funcion = load_fcn_from_file(std_fileDir);
