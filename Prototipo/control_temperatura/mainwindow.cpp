@@ -10,7 +10,9 @@ MainWindow::MainWindow(QWidget *parent) :
     doConections();
     setInitialValues();
 
-    //iniciar timer entradas
+    //dibujar el ultimo resultado en resultados
+    ui->g_resultados->showAll(logger.getTiempo(), logger.getRef(), logger.getTemperatura(), logger.getU(), logger.getPh());
+
 }
 
 MainWindow::~MainWindow()
@@ -133,10 +135,12 @@ void MainWindow::on_rb_ref_fun_toggled(bool checked)
     CONTROL_MODIFY_CHECK;
     ui->l_dir_ref_fun->setEnabled(checked);
     ui->b_e_ref_fun->setEnabled(checked);
+
+    //configurar referencia
     if(checked){
-        //configurar controlador
-        controlSys.referencia = &refCustom;
-        refCustom.setFile(ui->l_dir_ref_fun->text());
+        if(!ui->l_dir_c_custom->text().isEmpty()){
+            on_l_dir_ref_fun_editingFinished();
+        }
     }
 }
 
@@ -151,6 +155,7 @@ void MainWindow::on_b_e_ref_fun_clicked()
 void MainWindow::on_l_dir_ref_fun_editingFinished()
 {
     CONTROL_MODIFY_CHECK;
+    controlSys.referencia = &refCustom;
     refCustom.setFile(ui->l_dir_ref_fun->text());
     DDEBUG("Referencia de funcion actualizada");
 }
@@ -172,16 +177,10 @@ void MainWindow::on_rb_ref_val_toggled(bool checked)
     }
 
 
+    //configurar referencia
     if(checked){
-        //configurar controlador
-        controlSys.referencia = &refValores;
-        refValores.setFile(ui->l_dir_ref_val->text());
-        if(ui->rb_end_mantener->isChecked()){
-            refValores.setEndAction(Ref_valores::Mantener);
-        }else if(ui->rb_end_0->isChecked()){
-            refValores.setEndAction(Ref_valores::Cero);
-        }else if(ui->rb_end_repetir->isChecked()){
-            refValores.setEndAction(Ref_valores::Repetir);
+        if(!ui->l_dir_ref_val->text().isEmpty()){
+            on_l_dir_ref_val_editingFinished();
         }
     }
 }
@@ -197,9 +196,17 @@ void MainWindow::on_b_e_ref_val_clicked()
 void MainWindow::on_l_dir_ref_val_editingFinished()
 {
     CONTROL_MODIFY_CHECK;
+    controlSys.referencia = &refValores;
     refValores.setFile(ui->l_dir_ref_val->text());
     refValores.verificar();
     DDEBUG("Referencia de valores actualizada");
+    if(ui->rb_end_mantener->isChecked()){
+        refValores.setEndAction(Ref_valores::Mantener);
+    }else if(ui->rb_end_0->isChecked()){
+        refValores.setEndAction(Ref_valores::Cero);
+    }else if(ui->rb_end_repetir->isChecked()){
+        refValores.setEndAction(Ref_valores::Repetir);
+    }
 }
 
 void MainWindow::on_rb_end_mantener_toggled(bool checked)
@@ -264,7 +271,6 @@ void MainWindow::on_l_Kd_editingFinished()
     algoritmoPID.setPID(ui->l_Kp->text().toDouble(), ui->l_Ki->text().toDouble(), ui->l_Kd->text().toDouble());
 }
 
-
 void MainWindow::on_rb_c_custom_toggled(bool checked)
 {
     CONTROL_MODIFY_CHECK;
@@ -273,9 +279,9 @@ void MainWindow::on_rb_c_custom_toggled(bool checked)
     ui->label_ref_fut->setEnabled(checked);
     ui->sb_future_ref->setEnabled(checked);
     if(checked){
-        //configurar controlador
-        controlSys.algoritmo = &algoritmoCustom;
-        algoritmoCustom.setFileDir(ui->l_dir_c_custom->text());
+        if(!ui->l_dir_c_custom->text().isEmpty()){
+            on_l_dir_c_custom_editingFinished();
+        }
     }
 }
 
@@ -291,6 +297,7 @@ void MainWindow::on_l_dir_c_custom_editingFinished()
 {
     DTRACE("Direccion de controlador editada");
     CONTROL_MODIFY_CHECK;
+    controlSys.algoritmo = &algoritmoCustom;
     algoritmoCustom.setFileDir(ui->l_dir_c_custom->text());
     DDEBUG("Algoritmo actualizado");
 }
@@ -364,19 +371,6 @@ void MainWindow::on_tabWidget_currentChanged(int index)
             ui->te_resumen->clear();
             ui->te_resumen->append(generarResumen());
         }
-    }else if(ui->tabWidget->tabText(index) == "Supervision"){
-        //dibujar referencia si no esta iniciado
-        ui->g_supervision->rearmar(ui->cb_sensor_ph->isChecked());
-        QVector<double> refT, refV;
-        double tFinal = 10*60;
-        if(ui->cb_t_final->isChecked()){
-            tFinal = ui->timeEdit_duracion->time().hour()*3600;
-            tFinal += ui->timeEdit_duracion->time().minute()*60;
-            tFinal += ui->timeEdit_duracion->time().second();
-        }
-        controlSys.referencia->getInitRef(refT, refV, tFinal);
-        ui->g_supervision->setRef(refV, refT);
-
     }
 }
 
@@ -429,11 +423,7 @@ QString MainWindow::generarResumen()
 
 }
 
-
-//--------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------
 // Supervision
-
 
 void MainWindow::on_b_iniciar_clicked()
 {
@@ -465,6 +455,8 @@ void MainWindow::on_b_iniciar_clicked()
 
     logger.clear();
 
+    on_b_dibujarRef_clicked();
+
     if(!controlSys.controlStart()){
         DLOG("sistema de control no iniciado");
         QMessageBox mensajeError;
@@ -478,6 +470,7 @@ void MainWindow::on_b_iniciar_clicked()
     DLOG("sistema de control iniciado");
 
     ui->b_detener->setEnabled(true);
+    ui->b_dibujarRef->setEnabled(false);
     ui->tab_ts->setEnabled(false);
     ui->tab_tiempo->setEnabled(false);
     ui->tab_sensor->setEnabled(false);
@@ -498,6 +491,35 @@ void MainWindow::on_b_detener_clicked()
     controlSys.controlStop();
 }
 
+void MainWindow::on_b_dibujarRef_clicked()
+{
+    //dibujar referencia si no esta iniciado
+    ui->g_supervision->rearmar(ui->cb_sensor_ph->isChecked());
+    QVector<double> refT, refV;
+    double tFinal = 10*60;
+    if(ui->cb_t_final->isChecked()){
+        tFinal = ui->timeEdit_duracion->time().hour()*3600;
+        tFinal += ui->timeEdit_duracion->time().minute()*60;
+        tFinal += ui->timeEdit_duracion->time().second();
+    }
+    controlSys.referencia->getInitRef(refT, refV, tFinal);
+    ui->g_supervision->setRef(refV, refT);
+}
+
+
+// Resulatados
+
+void MainWindow::on_b_exportar_clicked()
+{
+    QString fileDir = QFileDialog::getSaveFileName(this, tr("guardar datos del ensayo"), "~/", tr("Texto (*.txt);;Valores separados por coma (*.csv);;Archivo de valores de MatLab (*.mat)"));
+    logger.saveFile(fileDir, controlSys.algoritmo->getPh_flag());
+}
+
+
+//--------------------------------------------------------------------------------
+
+//--------------------------------------------------------------------------------
+// Funcionamiento del sistema de control
 
 void MainWindow::slot_entradas_ticker_timeout()
 {
@@ -516,6 +538,7 @@ void MainWindow::slot_control_stoped()
     entradas_ticker.start(entrada_refresh_time);
     ui->b_detener->setEnabled(false);
     ui->b_iniciar->setEnabled(true);
+    ui->b_dibujarRef->setEnabled(true);
 
     ui->tab_ts->setEnabled(true);
     ui->tab_tiempo->setEnabled(true);
@@ -556,8 +579,4 @@ void MainWindow::slot_lecturaTermocupla(double temperatura)
     ui->label_term_value->setText(QString::number(temperatura, 'g', 2).append("°C"));
 }
 
-void MainWindow::on_b_exportar_clicked()
-{
-    QString fileDir = QFileDialog::getSaveFileName(this, tr("guardar datos del ensayo"), "~/", tr("Texto (*.txt);;Valores separados por coma (*.csv);;Archivo de valores de MatLab (*.mat)"));
-    logger.saveFile(fileDir, controlSys.algoritmo->getPh_flag());
-}
+

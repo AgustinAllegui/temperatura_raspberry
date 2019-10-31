@@ -77,6 +77,9 @@ private slots:
 
     void on_b_iniciar_clicked();
     void on_b_detener_clicked();
+    void on_b_dibujarRef_clicked();
+
+    void on_b_exportar_clicked();
 
     void slot_entradas_ticker_timeout();
     void slot_control_ticker_timeout();
@@ -88,7 +91,6 @@ private slots:
     void slot_lecturaTermocupla(double temperatura);
 
 
-    void on_b_exportar_clicked();
 
 private:
     Ui::MainWindow *ui;

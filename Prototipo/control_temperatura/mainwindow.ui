@@ -24,7 +24,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>7</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_ts">
        <attribute name="title">
@@ -111,6 +111,9 @@
         </item>
         <item>
          <widget class="QCheckBox" name="cb_sensor_ph">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="text">
            <string>Sensor de Ph</string>
           </property>
@@ -600,7 +603,14 @@ p, li { white-space: pre-wrap; }
             </property>
            </widget>
           </item>
-          <item row="0" column="1" rowspan="2">
+          <item row="2" column="0">
+           <widget class="QPushButton" name="b_dibujarRef">
+            <property name="text">
+             <string>Dibujar Referencia</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" rowspan="3">
            <widget class="GraficoCustom" name="g_supervision" native="true"/>
           </item>
          </layout>

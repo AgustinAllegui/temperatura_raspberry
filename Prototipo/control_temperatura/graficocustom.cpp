@@ -169,6 +169,7 @@ void GraficoCustom::showAll(QVector<double> tiempo, QVector<double> referencia, 
     DTRACE("mostrar todo en grafico con ph");
     showAll(tiempo, referencia, temperatura, u);
     lineaPh->setData(tiempo, ph);
+    rearmar(true);
     reescalar();
 }
 
