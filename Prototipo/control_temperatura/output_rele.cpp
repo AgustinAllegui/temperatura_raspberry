@@ -7,7 +7,8 @@ Output_rele::Output_rele()
     , direccion(SALIDA_FILE_DIR)
 #endif
 {
-
+    salidaMinima = 0;
+    salidaMaxima = 100;
 }
 
 void Output_rele::config(const int n_Ts_)
@@ -24,10 +25,10 @@ void Output_rele::config(const int n_Ts_)
 
 #if OUTPUT_VERSION == TO_TEXT   // salida a texto
 
-void Output_rele::setOutput(const double output_)
+double Output_rele::setOutput(const double output_)
 {
     DTRACE("set output" << output_);
-    output_value = output_;
+    output_value = checkSaturacion(output_);
     QFile archivo(direccion);
     if(!archivo.open(QFile::WriteOnly | QFile::Append)){
         //error al abrir el archivo
@@ -39,6 +40,7 @@ void Output_rele::setOutput(const double output_)
 //    archivo.seek(archivo.size());
     archivo.write(byteArray);
     archivo.close();
+    return output_value;
 }
 
 #endif  //salida a texto
@@ -47,3 +49,17 @@ void Output_rele::emergencyStop()
 {
     setOutput(0);
 }
+
+double Output_rele::checkSaturacion(const double valor_)
+{
+    if(valor_ <= salidaMinima){
+        return salidaMinima;
+    }
+    if(valor_ >= salidaMaxima){
+        return salidaMaxima;
+    }
+
+    return valor_;
+}
+
+

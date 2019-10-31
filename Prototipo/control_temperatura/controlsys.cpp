@@ -45,7 +45,7 @@ void ControlSys::controlTic()
 
     double salidaValue = algoritmo->tic(timeSinceStart, refValue, tempValue);
 
-    salida->setOutput(salidaValue);
+    salidaValue = salida->setOutput(salidaValue);
 
     emit s_control_data(timeSinceStart, refValue, tempValue, salidaValue, phValue);
 

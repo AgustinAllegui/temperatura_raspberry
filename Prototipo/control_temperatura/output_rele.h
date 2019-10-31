@@ -37,7 +37,7 @@ public:
 
     //interfaz
     void config(const int n_Ts_ = 1);
-    void setOutput(const double output_);
+    double setOutput(const double output_);
 
     void emergencyStop();
 
@@ -45,6 +45,11 @@ public:
     // variables privadas
     double output_value;
     int n_Ts;   //numero de ciclos del rele en un tiempo de muestreo
+
+    double salidaMinima, salidaMaxima;
+
+    //metodos privados
+    double checkSaturacion(const double valor_);
 
 #if OUTPUT_VERSION == TO_TEXT
     QString direccion;
