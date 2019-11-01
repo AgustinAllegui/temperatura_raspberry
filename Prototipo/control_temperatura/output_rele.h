@@ -11,29 +11,30 @@
  * mostrar en la interfaz
  */
 
-#include <QDebug>
 #include "dev_op.h"
+
+#include <QObject>
 #include "tscontainer.h"
 
-/* configuracion de version
- */
-#define TO_TEXT     0   //carga el valor en un texto
-#define TO_RELAY    1   //carga el valor en la salida rele
+#if CURRENT_DEVICE == ON_PC
 
-#ifndef OUTPUT_VERSION
-#define OUTPUT_VERSION TO_TEXT
-#endif
-
-#if OUTPUT_VERSION == TO_TEXT //interfaz desde texto
     #include <QFile>
     #include <QString>
-#endif  //interfaz desde texto
+
+#elif CURRENT_DEVICE == ON_RASPBERRY
+
+    #include "Libs/pinhandler.h"
+    #include <QTimer>
+
+#endif
 
 
-class Output_rele
+
+class Output_rele : public QObject
 {
+    Q_OBJECT
 public:
-    Output_rele();
+    explicit Output_rele(QObject *parent = 0);
 
     //interfaz
     void config(const int n_Ts_ = 1);
@@ -41,7 +42,7 @@ public:
 
     void emergencyStop();
 
-    protected:
+protected:
     // variables privadas
     double output_value;
     int n_Ts;   //numero de ciclos del rele en un tiempo de muestreo
@@ -51,9 +52,27 @@ public:
     //metodos privados
     double checkSaturacion(const double valor_);
 
-#if OUTPUT_VERSION == TO_TEXT
+#if CURRENT_DEVICE == ON_PC
     QString direccion;
 #endif
+
+private:
+#if CURRENT_DEVICE == ON_RASPBERRY
+    bool pinMirror;
+    PinHandler pinHandler;
+
+    QTimer activeOutTimer;
+
+
+private slots:
+    void slot_activeOutTimer_timeout();
+#endif
+
+signals:
+    void s_outputChange(bool isHigh);
+
+public slots:
+
 };
 
 #endif // OUTPUT_RELE_H

@@ -1,21 +1,33 @@
 #include "output_rele.h"
 
-Output_rele::Output_rele()
-    : output_value(0)
-    , n_Ts(1)
-#if OUTPUT_VERSION == TO_TEXT
-    , direccion(SALIDA_FILE_DIR)
-#endif
+Output_rele::Output_rele(QObject *parent)
+    : QObject(parent)
 {
+    output_value = 0;
+    n_Ts = 1;
     salidaMinima = 0;
     salidaMaxima = 100;
+
+    emit s_outputChange(false);
+
+#if CURRENT_DEVICE == ON_PC
+    direccion = SALIDA_FILE_DIR;
+#elif CURRENT_DEVICE == ON_RASPBERRY
+    pinMode(PIN_RELE, OUTPUT);
+    digitalWrite(PIN_RELE, LOW);
+    activeOutTimer.setSingleShot(true);
+    activeOutTimer.setTimerType(Qt::PreciseTimer);
+    connect(&activeOutTimer, SIGNAL(timeout()), this, SLOT(slot_activeOutTimer_timeout()));
+#endif
 }
 
+
+//pensada para cuestiones de compatibilidad
 void Output_rele::config(const int n_Ts_)
 {
     n_Ts = n_Ts_;
 
-#if OUTPUT_VERSION == TO_TEXT
+#if CURRENT_DEVICE == ON_PC
     QFile archivo(direccion);
     if(archivo.exists()){
         archivo.remove();
@@ -23,12 +35,13 @@ void Output_rele::config(const int n_Ts_)
 #endif
 }
 
-#if OUTPUT_VERSION == TO_TEXT   // salida a texto
 
 double Output_rele::setOutput(const double output_)
 {
     DTRACE("set output" << output_);
     output_value = checkSaturacion(output_);
+
+#if CURRENT_DEVICE == ON_PC   // salida a texto
     QFile archivo(direccion);
     if(!archivo.open(QFile::WriteOnly | QFile::Append)){
         //error al abrir el archivo
@@ -40,14 +53,33 @@ double Output_rele::setOutput(const double output_)
 //    archivo.seek(archivo.size());
     archivo.write(byteArray);
     archivo.close();
+
+#elif CURRENT_DEVICE == ON_RASPBERRY    //salida a rele
+
+    if(output_value == 0){
+        digitalWrite(PIN_RELE, LOW);
+        emit s_outputChange(false);
+    }else if(output_value == 100){
+        digitalWrite(PIN_RELE, HIGH);
+        emit s_outputChange(true);
+    }else{
+        //avtivar el rele y bajarlo cuando el timer haga timeout
+        digitalWrite(PIN_RELE, HIGH);
+        emit s_outputChange(true);
+        activeOutTimer.start(1000*(TsContainer::Ts/output_value));
+    }
+
+#endif
     return output_value;
 }
 
-#endif  //salida a texto
 
 void Output_rele::emergencyStop()
 {
     setOutput(0);
+#if CURRENT_DEVICE == ON_RASPBERRY
+    digitalWrite(PIN_RELE, LOW);
+#endif
 }
 
 double Output_rele::checkSaturacion(const double valor_)
@@ -61,5 +93,16 @@ double Output_rele::checkSaturacion(const double valor_)
 
     return valor_;
 }
+
+#if CURRENT_DEVICE == ON_RASPBERRY
+
+void Output_rele::slot_activeOutTimer_timeout()
+{
+    digitalWrite(PIN_RELE, LOW);
+    emit s_outputChange(false);
+}
+
+#endif
+
 
 
