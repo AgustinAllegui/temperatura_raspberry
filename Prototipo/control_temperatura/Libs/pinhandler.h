@@ -14,6 +14,12 @@
 #define PIN_PT100_CLK       0
 #define PIN_PT100_CS        2
 
+#define PIN_RELE            7
+
+
+
+/*  constantes para el calculo de PT100
+ */
 #define PT100_R_REF         430.0
 #define PT100_R_NOMINAL     100.0
 
@@ -21,7 +27,6 @@
 #define PT100_RTD_B -5.775e-7
 
 
-#define PIN_RELE            7
 
 
 
