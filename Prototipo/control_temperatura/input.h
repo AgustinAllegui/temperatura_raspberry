@@ -49,6 +49,7 @@ protected:
 class Input_ph
     : public Input_base
 {
+    Q_OBJECT
 public:
     Input_ph();
 
@@ -59,6 +60,7 @@ public:
 class InputTermocupla
     : public Input_base
 {
+    Q_OBJECT
 public:
     InputTermocupla();
 
@@ -76,6 +78,7 @@ private:
 class InputPT100
     : public Input_base
 {
+    Q_OBJECT
 public:
     InputPT100();
 

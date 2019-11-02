@@ -191,7 +191,7 @@ void Algoritmo_pid::setPID(const double Kp_, const double Ki_, const double Kd_)
     Kp = Kp_;
     Ki = Ki_;
     Kd = Kd_;
-    fileDir = "/home/pi/Documents/Files/Internos/PID_rbp.m";
+    fileDir = PID_DIR;
 
 }
 
