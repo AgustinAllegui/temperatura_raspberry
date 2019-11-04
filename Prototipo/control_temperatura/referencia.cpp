@@ -117,7 +117,7 @@ double Ref_valores::getRef(const double t_)
     static double respuesta = 0;
 
     unsigned int k = (unsigned int)(t_/TsContainer::Ts);
-    DDEBUG("K: " << k);
+    //DDEBUG("K: " << k);
 
     switch(endAction){
         case Cero:{
@@ -228,7 +228,7 @@ double Ref_funcionC::getRef(const double t_)
     octave_value_list salida_list = feval(funcion, entrada_list, 1);
 
     double referencia = salida_list(0).double_value();
-//    DDEBUG("Referencia" << referencia);
+//    //DDEBUG("Referencia" << referencia);
     return referencia;
 }
 

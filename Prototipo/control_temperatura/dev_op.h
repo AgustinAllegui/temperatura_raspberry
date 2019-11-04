@@ -63,8 +63,8 @@
 
 
 //#define DEBUG_LEVEL DEB_RELEACE
-//#define DEBUG_LEVEL DEB_TRACE
 //#define DEBUG_LEVEL DEB_LOG
+//#define DEBUG_LEVEL DEB_TRACE
 #define DEBUG_LEVEL DEB_DEBUG
 
 #endif //debug_level defined

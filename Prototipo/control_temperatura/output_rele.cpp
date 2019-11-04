@@ -67,11 +67,11 @@ double Output_rele::setOutput(const double output_)
         //avtivar el rele y bajarlo cuando el timer haga timeout
         digitalWrite(PIN_RELE, HIGH);
         emit s_outputChange(true);
-        DDEBUG("tiempo timer double" << (TsContainer::Ts)*(output_value/100));
+        //DDEBUG("tiempo timer double" << (TsContainer::Ts)*(output_value/100));
         int timerTime = int((TsContainer::Ts)*(output_value/100));
-        DDEBUG("tiempo timer" << timerTime << "Segundos");
+        //DDEBUG("tiempo timer" << timerTime << "Segundos");
         timerTime *= 1000;
-        DDEBUG("tiempo timer" << timerTime << "Mseg");
+        //DDEBUG("tiempo timer" << timerTime << "Mseg");
         activeOutTimer.start(timerTime);
     }
 

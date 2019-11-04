@@ -156,8 +156,8 @@ void GraficoCustom::showAll(QVector<double> tiempo, QVector<double> referencia, 
 {
     DTRACE("mostrar todo en grafico");
     rearmar(false);
-//    DDEBUG("largo de tiempo" << tiempo.length());
-//    DDEBUG("tiempo" << tiempo);
+//    //DDEBUG("largo de tiempo" << tiempo.length());
+//    //DDEBUG("tiempo" << tiempo);
     lineaRef->setData(tiempo, referencia);
     lineaTemp->setData(tiempo, temperatura);
     lineaU->setData(tiempo, u);

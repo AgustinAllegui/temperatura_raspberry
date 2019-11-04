@@ -162,7 +162,7 @@ void MainWindow::on_l_dir_ref_fun_editingFinished()
     CONTROL_MODIFY_CHECK;
     controlSys.referencia = &refCustom;
     refCustom.setFile(ui->l_dir_ref_fun->text());
-    DDEBUG("Referencia de funcion actualizada");
+    //DDEBUG("Referencia de funcion actualizada");
 }
 
 void MainWindow::on_rb_ref_val_toggled(bool checked)
@@ -204,7 +204,7 @@ void MainWindow::on_l_dir_ref_val_editingFinished()
     controlSys.referencia = &refValores;
     refValores.setFile(ui->l_dir_ref_val->text());
     refValores.verificar();
-    DDEBUG("Referencia de valores actualizada");
+    //DDEBUG("Referencia de valores actualizada");
     if(ui->rb_end_mantener->isChecked()){
         refValores.setEndAction(Ref_valores::Mantener);
     }else if(ui->rb_end_0->isChecked()){
@@ -304,7 +304,7 @@ void MainWindow::on_l_dir_c_custom_editingFinished()
     CONTROL_MODIFY_CHECK;
     controlSys.algoritmo = &algoritmoCustom;
     algoritmoCustom.setFileDir(ui->l_dir_c_custom->text());
-    DDEBUG("Algoritmo actualizado");
+    //DDEBUG("Algoritmo actualizado");
 }
 
 void MainWindow::on_sb_future_ref_valueChanged(int arg1)
@@ -355,12 +355,12 @@ void MainWindow::on_b_usar_t_val_clicked()
 {
     CONTROL_MODIFY_CHECK;
     double largo = (double) refValores.getFileLength();
-    DDEBUG("largo double" << largo);
+    //DDEBUG("largo double" << largo);
     double duracion = TsContainer::Ts * largo;
-    DDEBUG("duracion double" << duracion);
+    //DDEBUG("duracion double" << duracion);
 
     int duracion_int = (int) duracion +1;
-    DDEBUG("duracion int" << duracion_int);
+    //DDEBUG("duracion int" << duracion_int);
     ui->timeEdit_duracion->setTime(QTime(0,0).addSecs(duracion_int));
 }
 

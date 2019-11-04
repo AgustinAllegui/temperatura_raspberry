@@ -72,15 +72,15 @@ bool ControlSys::controlStart()
         emit s_control_stop();
         return false;
     }
-    DDEBUG("referencia verificada");
+    //DDEBUG("referencia verificada");
     if(!algoritmo->verificar()){
         DERROR("Algoritmo no verificado");
         emit s_control_stop();
         return false;
     }
-    DDEBUG("algoritmo verificado");
+    //DDEBUG("algoritmo verificado");
     algoritmo->limpiarScope();
-    DDEBUG("scope de octave limpiado");
+    //DDEBUG("scope de octave limpiado");
     salida->config(1);
     runState = true;
     controlTic();

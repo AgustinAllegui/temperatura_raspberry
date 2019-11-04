@@ -103,7 +103,7 @@ double InputTermocupla::read()
     wiringPiSPIDataRW(0, lectura, 2);
     digitalWrite(PIN_TERMOCUPLA_CS, HIGH);
 
-//    DDEBUG(QString("lectura crudo %1 %2").arg(lectura[0],8,2,QLatin1Char('0')).arg(lectura[1],8,2,QLatin1Char('0')));
+//    //DDEBUG(QString("lectura crudo %1 %2").arg(lectura[0],8,2,QLatin1Char('0')).arg(lectura[1],8,2,QLatin1Char('0')));
 
     if(lectura[1] & 0b00000100){
         DERROR("termocupla no conectada");
@@ -115,17 +115,17 @@ double InputTermocupla::read()
     lectura16 = lectura16<<8;
     lectura16 += lectura[1];
 
-//    DDEBUG(QString("lectura junta %1").arg(lectura16,16,2,QLatin1Char('0')));
+//    //DDEBUG(QString("lectura junta %1").arg(lectura16,16,2,QLatin1Char('0')));
 
     lectura16 &= 0b0111111111111000;
     lectura16 = lectura16 >>3;
-//    DDEBUG(QString("lectura uint16_t %1").arg(lectura16,16,2,QLatin1Char('0')));
+//    //DDEBUG(QString("lectura uint16_t %1").arg(lectura16,16,2,QLatin1Char('0')));
 
     double temperatura = lectura16;
-//    DDEBUG("lectura:" << lectura16);
-//    DDEBUG("temperatura:" << temperatura);
+//    //DDEBUG("lectura:" << lectura16);
+//    //DDEBUG("temperatura:" << temperatura);
     temperatura = temperatura/4;
-    DDEBUG("temperatura:" << temperatura);
+    DDEBUG("temperatura Termocupla:" << temperatura);
 
     lastValue = temperatura;
     emit s_inputTermocupla_read(temperatura);
@@ -177,6 +177,11 @@ double InputPT100::read()
 
     //realizar una lectura (one shot)
     uint8_t reg0 = leerRegistro(0x00);
+    DDEBUG(QString("reg0: %1").arg(reg0, 8, 2, QLatin1Char('0')));
+    if(reg0 != 0b10010000){
+        escribirRegistro(0x80, 0b10010000);
+        reg0 = 0b10010000;
+    }
     reg0 |= 0x20;
     escribirRegistro(0x80, reg0);
 
@@ -196,12 +201,16 @@ double InputPT100::read()
 
     rtd = rtdHigh;
     rtd <<= 8;
-//    DDEBUG("lectura de registros" << rtd);
 
     rtd |= rtdLow;
+    DDEBUG("lectura reg rtd:" << rtd);
 
-
-    rtd >>= 1;  //quitar falla de lectura
+    if(rtd & 0x01){
+        DERROR("Falla en la lectura de PT100" << leerFalla());
+        return -1;
+    }
+    rtd >>= 1;  //quitar bit de falla de lectura
+    DDEBUG("rtd:" << rtd);
 
     //convertir lectura en temperatura
     double Rt = rtd;
@@ -216,7 +225,7 @@ double InputPT100::read()
     double temperatura = Z2 + (Z3 * Rt);
     temperatura = (sqrt(temperatura) + Z1) / Z4;
 
-    DDEBUG("temperatura 1" << temperatura);
+    DDEBUG("temperatura PT100:" << temperatura);
     if(temperatura >= 0){
         lastValue = temperatura;
         emit s_inputPT100_read(temperatura);
@@ -240,7 +249,7 @@ double InputPT100::read()
     rpoly *= Rt;  // ^5
     temperatura += 1.5243e-10 * rpoly;
 
-    DDEBUG("temperatura 2" << temperatura);
+    DDEBUG("temperatura PT100 2:" << temperatura);
     lastValue = temperatura;
     emit s_inputPT100_read(temperatura);
     return temperatura;

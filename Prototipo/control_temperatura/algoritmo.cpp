@@ -41,7 +41,7 @@ void Algoritmo_base::setFileDir(QString fileDir_)
             break;
         }
     }
-    DDEBUG("direccion" << fileDir);
+    //DDEBUG("direccion" << fileDir);
 
 }
 
@@ -105,7 +105,7 @@ double Algoritmo_base::tic(const double t_, const double ref_, const double temp
     int i = 4;
     Matrix futureRef_matrix;
     if(n_fut>0){
-        DDEBUG("pass futRef");
+        //DDEBUG("pass futRef");
         futureRef_matrix = Matrix(n_fut,1);
         for(octave_idx_type j = 0; j<n_fut; j++){
             futureRef_matrix.elem(j,0) = futureRef[j];
@@ -114,15 +114,15 @@ double Algoritmo_base::tic(const double t_, const double ref_, const double temp
         i++;
     }
     if(ph_flag){
-        DDEBUG("pass ph");
+        //DDEBUG("pass ph");
         entrada_list(i) = ph;
     }
 
-    DDEBUG("entrada seteada" << entrada_list.length());
+    //DDEBUG("entrada seteada" << entrada_list.length());
 
     octave_value_list salida_list = feval(funcion, entrada_list, 1);
 
-    DDEBUG("salida calculada" << salida_list.length());
+    //DDEBUG("salida calculada" << salida_list.length());
 
     double accion_control = salida_list(0).double_value();
     return accion_control;
@@ -134,7 +134,7 @@ bool Algoritmo_base::verificar()
     DTRACE("Algoritmo base Verificar");
     // llamar a function [u] = funcion(Ts, t, referencia, temperatura, [futRef], [ph]);
     //calcular y retornar el valor para t = 1
-    DDEBUG("direccion" << fileDir);
+    //DDEBUG("direccion" << fileDir);
     std::string std_fileDir = fileDir.toStdString();
     octave_function *funcion = load_fcn_from_file(std_fileDir);
 
@@ -148,24 +148,24 @@ bool Algoritmo_base::verificar()
     octave_idx_type i = 3;
     if(n_fut>0){
         i++;
-        DDEBUG("pass futRef" << n_fut);
+        //DDEBUG("pass futRef" << n_fut);
         futureRef_matrix = Matrix(n_fut,1);
         for(octave_idx_type j = 0; j<n_fut; j++){
-            DDEBUG("f ref" << j+5);
+            //DDEBUG("f ref" << j+5);
             futureRef_matrix.elem(j,0) = 5+j;
         }
         entrada_list(i) = futureRef_matrix;
-        DDEBUG("entradalist" << entrada_list(i).double_value());
+        //DDEBUG("entradalist" << entrada_list(i).double_value());
     }
     if(ph_flag){
         i++;
-        DDEBUG("pass ph" << 1);
+        //DDEBUG("pass ph" << 1);
         entrada_list(i) = 1;
     }
 
-    DDEBUG("lista de datos");
+    //DDEBUG("lista de datos");
     for(octave_idx_type k = 0; k<=i ; k++){
-        DDEBUG(k << entrada_list(k).double_value());
+        //DDEBUG(k << entrada_list(k).double_value());
     }
 
     octave_value_list salida_list = feval(funcion, entrada_list, 1);

@@ -57,8 +57,8 @@ void Logger::addPoint(double t_, double ref_, double temp_, double u_, double ph
     reglon.append(' ').append(QString::number(u_));
     reglon.append(' ').append(QString::number(ph_));
 
-    DDEBUG("añadida linea");
-    DDEBUG(reglon);
+    //DDEBUG("añadida linea");
+    //DDEBUG(reglon);
 
     reglon.append("\r\n");
 
@@ -168,9 +168,9 @@ void Logger::saveTxtCsv(QString direccion_, const bool phFlag, const char separa
     while(!archivoIn.atEnd()){
         reglon = archivoIn.readLine();
         if(!phFlag){
-            DDEBUG("antes de recortar" << reglon);
+            //DDEBUG("antes de recortar" << reglon);
             reglon.chop(reglon.size()-reglon.lastIndexOf(' '));
-            DDEBUG("despues de recortar" << reglon);
+            //DDEBUG("despues de recortar" << reglon);
         }
         archivoOut.write(QByteArray().append(reglon + "\r\n"));
     }

@@ -11,11 +11,6 @@
  */
 
 
-/* hacer que cada sensor emita una señal cuando se hace la
- * lectura y usar eso para actualizar el valor en la barra
- * de estado de la interfaz
- */
-
 
 #if CURRENT_DEVICE == ON_PC //interfaz desde texto
     #include <QFile>
