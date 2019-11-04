@@ -49,11 +49,11 @@ void ControlSys::controlTic()
 
     emit s_control_data(timeSinceStart, refValue, tempValue, salidaValue, phValue);
 
-    DDEBUG("t =" << timeSinceStart);
-    DDEBUG("t_limite" << duracion);
-    DDEBUG("temperatura =" << tempValue);
-    DDEBUG("referencia =" << refValue);
-    DDEBUG("salida =" << salidaValue);
+    DLOG("t =" << timeSinceStart);
+    DLOG("t_limite" << duracion);
+    DLOG("temperatura =" << tempValue);
+    DLOG("referencia =" << refValue);
+    DLOG("salida =" << salidaValue);
 
     timeSinceStart += TsContainer::Ts;
     if(duracion != 0){

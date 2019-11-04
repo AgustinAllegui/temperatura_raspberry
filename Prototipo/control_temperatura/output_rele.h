@@ -70,6 +70,7 @@ private slots:
 
 signals:
     void s_outputChange(bool isHigh);
+    void s_outputValueChange(double value);
 
 public slots:
 

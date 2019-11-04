@@ -89,6 +89,8 @@ private slots:
     
     void slot_lecturaPT100(double temperatura);
     void slot_lecturaTermocupla(double temperatura);
+    void slot_output_value_changed(double valor);
+    void slot_output_rele_state_changed(bool activated);
 
 
 

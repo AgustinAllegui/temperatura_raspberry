@@ -56,6 +56,7 @@ double Output_rele::setOutput(const double output_)
 
 #elif CURRENT_DEVICE == ON_RASPBERRY    //salida a rele
 
+    emit s_outputValueChange(output_value);
     if(output_value == 0){
         digitalWrite(PIN_RELE, LOW);
         emit s_outputChange(false);
@@ -66,7 +67,12 @@ double Output_rele::setOutput(const double output_)
         //avtivar el rele y bajarlo cuando el timer haga timeout
         digitalWrite(PIN_RELE, HIGH);
         emit s_outputChange(true);
-        activeOutTimer.start(1000*(TsContainer::Ts/output_value));
+        DDEBUG("tiempo timer double" << (TsContainer::Ts)*(output_value/100));
+        int timerTime = int((TsContainer::Ts)*(output_value/100));
+        DDEBUG("tiempo timer" << timerTime << "Segundos");
+        timerTime *= 1000;
+        DDEBUG("tiempo timer" << timerTime << "Mseg");
+        activeOutTimer.start(timerTime);
     }
 
 #endif

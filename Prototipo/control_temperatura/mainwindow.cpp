@@ -43,6 +43,11 @@ void MainWindow::doConections()
     connect(&termocupla, SIGNAL(s_inputTermocupla_read(double)), this, SLOT(slot_lecturaTermocupla(double)));
 #endif
 
+    //conectar señales de salida a mensajes en pantalla
+    connect(&OutRele, SIGNAL(s_outputChange(bool)), this, SLOT(slot_output_rele_state_changed(bool)));
+    connect(&OutRele, SIGNAL(s_outputValueChange(double)), this, SLOT(slot_output_value_changed(double)));
+
+
 }
 
 void MainWindow::setInitialValues()
@@ -568,15 +573,28 @@ void MainWindow::slot_controlSys_s_control_data(double t_, double ref_, double t
     logger.addPoint(t_, ref_, temp_, u_, ph_);
 }
 
+//slots para mostrar valores en pantalla
 
 void MainWindow::slot_lecturaPT100(double temperatura)
 {
-    ui->label_pt100_value->setText(QString::number(temperatura, 'g', 2).append("°C"));
+    ui->label_pt100_value->setText(QString::number(temperatura, 'f', 2).append("°C"));
 }
 
 void MainWindow::slot_lecturaTermocupla(double temperatura)
 {
-    ui->label_term_value->setText(QString::number(temperatura, 'g', 2).append("°C"));
+    ui->label_term_value->setText(QString::number(temperatura, 'f', 2).append("°C"));
 }
 
+void MainWindow::slot_output_rele_state_changed(bool activated)
+{
+    if(activated){
+        ui->label_act_state->setText("Activado");
+    }else{
+        ui->label_act_state->setText("Desactivado");
+    }
+}
 
+void MainWindow::slot_output_value_changed(double valor)
+{
+    ui->label_act_value->setText(QString::number(valor, 'f', 1).append('%'));
+}
