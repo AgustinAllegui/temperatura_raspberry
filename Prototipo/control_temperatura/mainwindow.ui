@@ -81,26 +81,71 @@
        <attribute name="title">
         <string>Sensor</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
+       <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QRadioButton" name="rb_PT100">
-          <property name="text">
-           <string>PT100</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="rb_term">
-          <property name="text">
-           <string>Termocupla</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="1">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Limite de seguridad =</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_PT100_safeLimit">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label_Termocupla_safeLimit">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QRadioButton" name="rb_term">
+            <property name="text">
+             <string>Termocupla</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3" rowspan="2">
+           <spacer name="horizontalSpacer_7">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Limite de seguridad =</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QRadioButton" name="rb_PT100">
+            <property name="text">
+             <string>PT100</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
          <widget class="Line" name="line_2">
@@ -792,7 +837,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>717</width>
-     <height>27</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>

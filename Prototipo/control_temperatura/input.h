@@ -59,15 +59,23 @@ class InputTermocupla
 public:
     InputTermocupla();
 
+    void setSafeLimit(const double safeLimit_){safeLimit = safeLimit_;}
 #if CURRENT_DEVICE == ON_RASPBERRY
     double read();
+#endif
 
 signals:
+    void s_inputTermocupla_safeLimitReached();
+#if CURRENT_DEVICE == ON_RASPBERRY
     void s_inputTermocupla_read(double temperatura_);
+#endif
 
 private:
+    double safeLimit;
+#if CURRENT_DEVICE == ON_RASPBERRY
     PinHandler pinHandler;
 #endif
+
 };
 
 class InputPT100
@@ -76,15 +84,19 @@ class InputPT100
     Q_OBJECT
 public:
     InputPT100();
-
+    void setSafeLimit(const double safeLimit_){safeLimit = safeLimit_;}
 #if CURRENT_DEVICE == ON_RASPBERRY
     double read();
-
+#endif
 signals:
+    void s_inputPT100_safeLimitReached();
+#if CURRENT_DEVICE == ON_RASPBERRY
     void s_inputPT100_read(double temperatura_);
-
+#endif
 
 private:
+    double safeLimit;
+#if CURRENT_DEVICE == ON_RASPBERRY
     PinHandler pinHandler;
 
     void limpiarFallas();

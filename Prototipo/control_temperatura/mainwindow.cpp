@@ -47,6 +47,9 @@ void MainWindow::doConections()
     connect(&OutRele, SIGNAL(s_outputChange(bool)), this, SLOT(slot_output_rele_state_changed(bool)));
     connect(&OutRele, SIGNAL(s_outputValueChange(double)), this, SLOT(slot_output_value_changed(double)));
 
+    //conectar señales de limite de temperatura
+    connect(&pt100, SIGNAL(s_inputPT100_safeLimitReached()), this, SLOT(slot_safeLimitReached()));
+    connect(&termocupla, SIGNAL(s_inputTermocupla_safeLimitReached()), this, SLOT(slot_safeLimitReached()));
 
 }
 
@@ -68,6 +71,54 @@ void MainWindow::setInitialValues()
     ui->rb_PID->setChecked(true);
 
     ui->cb_t_final->setChecked(false);
+}
+
+void MainWindow::configureTempLimit()
+{
+    QFile archivo(CONFIG_DIR);
+    QMessageBox error;
+    error.setIcon(QMessageBox::Critical);
+    if(!archivo.exists()){
+        DERROR("no se encontro archivo de configuracion");
+        error.setText("Error: no se encontro el archivo de configuracion config.ini");
+        error.exec();
+        return;
+    }
+
+    if(!archivo.open(QFile::ReadOnly | QFile::Text)){
+        DERROR("no se pudo abrir el archivo de configuracion");
+        error.setText("Error: no se pudo abrir el archivo config.ini");
+        error.exec();
+        return;
+    }
+
+    //escanear el archivo buscando las configuraciones
+    QString reglon;
+    double valorEncontrado;
+    archivo.seek(0);
+
+    while(!archivo.atEnd()){
+        reglon = archivo.readLine();
+        if(reglon.startsWith(';')){
+            continue;
+        }
+
+        //buscar el limite de seguridad de la PT100
+        if(reglon.startsWith("PT100-limite")){
+            valorEncontrado = reglon.split('=').at(1).toDouble();
+            pt100.setSafeLimit(valorEncontrado);
+            ui->label_PT100_safeLimit->setText(QString::number(valorEncontrado, 'f', 0).append("°C"));
+        }
+
+        //buscar el limite de seguridad de la termocupla
+        if(reglon.startsWith("termocupla-limite")){
+            valorEncontrado = reglon.split('=').at(1).toDouble();
+            termocupla.setSafeLimit(valorEncontrado);
+            ui->label_Termocupla_safeLimit->setText(QString::number(valorEncontrado, 'f', 0).append("°C"));
+        }
+    }
+
+
 }
 
 //--------------------------------------------------------------------------------
@@ -597,4 +648,18 @@ void MainWindow::slot_output_rele_state_changed(bool activated)
 void MainWindow::slot_output_value_changed(double valor)
 {
     ui->label_act_value->setText(QString::number(valor, 'f', 1).append('%'));
+}
+
+/* se alcanzo el limite de temperatura programado para un sensor
+ *  detener el experimento inmediatamente
+ */
+void MainWindow::slot_safeLimitReached()
+{
+    on_b_detener_clicked();
+    QMessageBox mensajeError;
+    mensajeError.setText("Se alcanzo el limite de temperatura"
+                         "El experimento se detuvo para evitar daños");
+    dontModify.setIcon(QMessageBox::Warning);
+    dontModify.exec();
+
 }

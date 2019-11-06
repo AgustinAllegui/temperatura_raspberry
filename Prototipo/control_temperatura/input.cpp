@@ -85,6 +85,7 @@ double Input_ph::read()
 
 InputTermocupla::InputTermocupla()
 {
+    safeLimit = 1000;
 #if CURRENT_DEVICE == ON_RASPBERRY
     //inicializar PIN_TERMOCUPLA_CS como salida y setear en alto
     pinMode(PIN_TERMOCUPLA_CS, OUTPUT);
@@ -129,6 +130,9 @@ double InputTermocupla::read()
 
     lastValue = temperatura;
     emit s_inputTermocupla_read(temperatura);
+    if(temperatura >= safeLimit){
+        emit s_inputTermocupla_safeLimitReached();
+    }
     return temperatura;
 }
 
@@ -140,6 +144,7 @@ double InputTermocupla::read()
 
 InputPT100::InputPT100()
 {
+    safeLimit = 600;
 #if CURRENT_DEVICE == ON_RASPBERRY
     //inicializar pines de comunicacion SPI
     pinMode(PIN_PT100_MOSI, OUTPUT);
@@ -229,6 +234,9 @@ double InputPT100::read()
     if(temperatura >= 0){
         lastValue = temperatura;
         emit s_inputPT100_read(temperatura);
+        if(temperatura >= safeLimit){
+            emit s_inputPT100_safeLimitReached();
+        }
         return temperatura;
     }
 
@@ -252,6 +260,9 @@ double InputPT100::read()
     DDEBUG("temperatura PT100 2:" << temperatura);
     lastValue = temperatura;
     emit s_inputPT100_read(temperatura);
+    if(temperatura >= safeLimit){
+        emit s_inputPT100_safeLimitReached();
+    }
     return temperatura;
 
 }

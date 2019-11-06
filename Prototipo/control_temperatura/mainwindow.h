@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QDebug>
 #include <QFileDialog>
+#include <QFile>
 #include <QMessageBox>
 #include <QTimer>
 
@@ -92,6 +93,8 @@ private slots:
     void slot_output_value_changed(double valor);
     void slot_output_rele_state_changed(bool activated);
 
+    void slot_safeLimitReached();
+
 
 
 private:
@@ -125,6 +128,7 @@ private:
     QString generarResumen();
     void setInitialValues();
     void doConections();
+    void configureTempLimit();
 
     //variables privadas
     const int entrada_refresh_time; //ms
