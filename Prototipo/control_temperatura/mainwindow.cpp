@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     doConections();
     setInitialValues();
+    configureTempLimit();
 
     //dibujar el ultimo resultado en resultados
     ui->g_resultados->showAll(logger.getTiempo(), logger.getRef(), logger.getTemperatura(), logger.getU(), logger.getPh());
@@ -659,7 +660,7 @@ void MainWindow::slot_safeLimitReached()
     QMessageBox mensajeError;
     mensajeError.setText("Se alcanzo el limite de temperatura"
                          "El experimento se detuvo para evitar daños");
-    dontModify.setIcon(QMessageBox::Warning);
-    dontModify.exec();
+    mensajeError.setIcon(QMessageBox::Warning);
+    mensajeError.exec();
 
 }
