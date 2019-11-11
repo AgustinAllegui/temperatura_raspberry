@@ -1,0 +1,21 @@
+
+								wiring	pin
+#define PIN_TERMOCUPLA_CS   	3		15
+mosi									19
+miso									21
+clk										23
+
+
+#define PIN_PT100_MOSI      	4		16
+#define PIN_PT100_MISO      	5		18
+#define PIN_PT100_CLK       	0		11
+#define PIN_PT100_CS        	2		13
+
+#define PIN_RELE            	7		7
+
+
+led 1							21		29
+led 2							22		31
+led 3							23		33
+
+boton 1							26		32
