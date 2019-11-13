@@ -16,6 +16,12 @@
 
 #define PIN_RELE            7
 
+#define PIN_LED_APP         23
+#define PIN_LED_RUN         22
+#define PIN_LED_RELE        21
+
+#define PIN_BOTON_STOP      26
+
 
 
 /*  constantes para el calculo de PT100

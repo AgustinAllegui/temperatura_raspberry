@@ -16,6 +16,7 @@
 #include "referencia.h"
 #include "output_rele.h"
 #include "logger.h"
+#include "Libs/pinhandler.h"
 
 
 #define CONTROL_MODIFY_CHECK do{                                                                                                \
@@ -132,6 +133,8 @@ private:
 
     //variables privadas
     const int entrada_refresh_time; //ms
+
+    PinHandler pinHandrler;
 
 };
 

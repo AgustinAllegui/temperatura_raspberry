@@ -4,7 +4,8 @@ ControlSys::ControlSys(QObject *parent)
     : QObject(parent)
     , runState(false)
 {
-
+    pinMode(PIN_LED_RUN, OUTPUT);
+    digitalWrite(PIN_LED_RUN, LOW);
 }
 
 void ControlSys::setDuracion(const double duracion_)
@@ -83,6 +84,7 @@ bool ControlSys::controlStart()
     //DDEBUG("scope de octave limpiado");
     salida->config(1);
     runState = true;
+    digitalWrite(PIN_LED_RUN,HIGH);
     controlTic();
     return true;
 }
@@ -91,5 +93,6 @@ void ControlSys::controlStop()
 {
     salida->setOutput(0);
     runState = false;
+    digitalWrite(PIN_LED_RUN,LOW);
     emit s_control_stop();
 }

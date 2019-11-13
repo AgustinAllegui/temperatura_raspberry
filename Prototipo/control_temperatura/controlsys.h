@@ -10,6 +10,7 @@
 #include "referencia.h"
 #include "algoritmo.h"
 #include "output_rele.h"
+#include "Libs/pinhandler.h"
 
 class ControlSys : public QObject
 {
@@ -50,6 +51,8 @@ private:
     double duracion;
 
     bool runState; //true si esta corriendo el algoritmo de control (entonces no modificar la configuracion)
+
+    PinHandler pinHandler;
 
 
 };

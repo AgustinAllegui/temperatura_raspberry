@@ -7,9 +7,12 @@ MainWindow::MainWindow(QWidget *parent) :
     entrada_refresh_time(5000)
 {
     ui->setupUi(this);
+    pinMode(PIN_LED_APP, OUTPUT);
+    digitalWrite(PIN_LED_APP, HIGH);
     doConections();
     setInitialValues();
     configureTempLimit();
+
 
     //dibujar el ultimo resultado en resultados
     ui->g_resultados->showAll(logger.getTiempo(), logger.getRef(), logger.getTemperatura(), logger.getU(), logger.getPh());
@@ -19,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     if(controlSys.isRuning()) OutRele.emergencyStop();
+    pinMode(PIN_LED_APP,LOW);
     delete ui;
 }
 

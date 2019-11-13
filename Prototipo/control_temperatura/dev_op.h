@@ -10,8 +10,8 @@
 #define ON_PC           1
 
 #ifndef CURRENT_DEVICE
-//#define CURRENT_DEVICE  ON_RASPBERRY
-#define CURRENT_DEVICE  ON_PC
+#define CURRENT_DEVICE  ON_RASPBERRY
+//#define CURRENT_DEVICE  ON_PC
 #endif
 
 //--------------------------------------------------------------------------------------------
