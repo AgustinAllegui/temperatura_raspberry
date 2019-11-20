@@ -21,7 +21,7 @@
 
 #define CONTROL_MODIFY_CHECK do{                                                                                                \
     if(controlSys.isRuning()){                                                                                                  \
-        DERROR("no modifique la configuracion");                                                                           \
+        D_ERROR("no modifique la configuracion");                                                                           \
         QMessageBox dontModify;                                                                                                 \
         dontModify.setText("Advertencia: no modifique la configuracion del controlador mientras se ejecuta un experimento");    \
         dontModify.setIcon(QMessageBox::Critical);                                                                              \

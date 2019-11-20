@@ -7,7 +7,7 @@ PinHandler::PinHandler()
 {
 #if CURRENT_DEVICE == ON_RASPBERRY
 //    if(getuid() == geteuid()){
-//        DERROR("el programa se debe ejecutar con SUDO");
+//        D_ERROR("el programa se debe ejecutar con SUDO");
 //        return;
 //    }
 
@@ -24,7 +24,7 @@ bool PinHandler::spiInit(const int channel_, const int speed_)
 {
 #if CURRENT_DEVICE == ON_RASPBERRY
     if(wiringPiSPISetup(channel_, speed_) == -1){
-        DERROR("no se pudo iniciar el SPI");
+        D_ERROR("no se pudo iniciar el SPI");
         return false;
     }
     spiCh0Inited = true;

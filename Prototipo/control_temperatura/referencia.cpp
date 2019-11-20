@@ -26,7 +26,7 @@ double Ref_base::getRef(const double t_, const int n_, double *ref_array_)
 
 void Ref_base::getInitRef(QVector<double> &t_, QVector<double> &ref_, const double TFinal_)
 {
-    DTRACE("generar vectores hasta" << TFinal_);
+    D_TRACE("generar vectores hasta" << TFinal_);
     t_.clear();
     ref_.clear();
     for(double t = 0; t < TFinal_; t+=TsContainer::Ts){
@@ -37,7 +37,7 @@ void Ref_base::getInitRef(QVector<double> &t_, QVector<double> &ref_, const doub
 
 bool Ref_base::verificar()
 {
-    DERROR("intento de verificar referencia base");
+    D_ERROR("intento de verificar referencia base");
     return false;
 }
 
@@ -62,11 +62,11 @@ void Ref_valores::setEndAction(EndAction endAction_)
 
 bool Ref_valores::verificar()
 {
-    DTRACE("verificar ref_valores");
+    D_TRACE("verificar ref_valores");
     //abrir el archivo
     QFile archivo(fileDir);
     if(!archivo.open(QFile::ReadOnly)){
-        DERROR(" no se pudo abrir archivo");
+        D_ERROR(" no se pudo abrir archivo");
         return false;
     }
 
@@ -100,7 +100,7 @@ bool Ref_valores::verificar()
     }
 
     if(!thereIsValid){
-        DERROR("no hay valores validos en el archivo despues de "<< fileLength << "filas");
+        D_ERROR("no hay valores validos en el archivo despues de "<< fileLength << "filas");
     }
     return thereIsValid;
 }
@@ -113,11 +113,11 @@ unsigned int Ref_valores::getFileLength()
 
 double Ref_valores::getRef(const double t_)
 {
-    DTRACE("get ref value");
+    D_TRACE("get ref value");
     static double respuesta = 0;
 
     unsigned int k = (unsigned int)(t_/TsContainer::Ts);
-    //DDEBUG("K: " << k);
+    //D_DEBUG("K: " << k);
 
     switch(endAction){
         case Cero:{
@@ -190,13 +190,13 @@ void Ref_funcionC::setFile(QString fileDir_)
     fileDir = fileDir_;
     QFile archivo(fileDir);
     if(!archivo.exists()){
-        DERROR("archivo no existe");
+        D_ERROR("archivo no existe");
         return;
     }
 
     //checkear si hay funcion de octave en el archivo
     if(!archivo.open(QFile::ReadOnly)){
-        DERROR("no se pudo abrir archivo");
+        D_ERROR("no se pudo abrir archivo");
         return;
     }
 
@@ -204,11 +204,11 @@ void Ref_funcionC::setFile(QString fileDir_)
     while(1){
         reglon = archivo.readLine();
         if(reglon.startsWith("function",Qt::CaseInsensitive)){
-            DLOG("funcion encontrada");
+            D_LOG("funcion encontrada");
             break;
         }
         if(archivo.atEnd()){
-            DERROR("el archivo no contiene una funcion");
+            D_ERROR("el archivo no contiene una funcion");
             break;
         }
     }
@@ -216,7 +216,7 @@ void Ref_funcionC::setFile(QString fileDir_)
 
 double Ref_funcionC::getRef(const double t_)
 {
-//    DTRACE("get ref funcion" << TsContainer::Ts << t_);
+//    D_TRACE("get ref funcion" << TsContainer::Ts << t_);
     //calcular y retornar el siguiente valor para t = t_
     std::string std_fileDir = fileDir.toStdString();
     octave_function *funcion = load_fcn_from_file(std_fileDir);
@@ -228,13 +228,13 @@ double Ref_funcionC::getRef(const double t_)
     octave_value_list salida_list = feval(funcion, entrada_list, 1);
 
     double referencia = salida_list(0).double_value();
-//    //DDEBUG("Referencia" << referencia);
+//    //D_DEBUG("Referencia" << referencia);
     return referencia;
 }
 
 bool Ref_funcionC::verificar()
 {
-    DTRACE("ref_funcion C verificar");
+    D_TRACE("ref_funcion C verificar");
     std::string std_fileDir = fileDir.toStdString();
     octave_function *funcion = load_fcn_from_file(std_fileDir);
 
@@ -262,7 +262,7 @@ Ref_funcionS::Ref_funcionS()
 
 void Ref_funcionS::setFunction(QString simpFunction_, QString fileDir_)
 {
-    DTRACE("Ref_funcion S set funcion");
+    D_TRACE("Ref_funcion S set funcion");
     fileDir = fileDir_;
     QFile archivo(fileDir);
 
@@ -270,7 +270,7 @@ void Ref_funcionS::setFunction(QString simpFunction_, QString fileDir_)
         archivo.remove();
     }
     if(!archivo.open(QFile::WriteOnly)){
-        DERROR("no se pudo generar el archivo");
+        D_ERROR("no se pudo generar el archivo");
     }
 
     archivo.write("% archivo del sistema. no modificar\n");
@@ -283,6 +283,6 @@ void Ref_funcionS::setFunction(QString simpFunction_, QString fileDir_)
 
 bool Ref_funcionS::verificar()
 {
-    DTRACE("ref_funcion S verificar");
+    D_TRACE("ref_funcion S verificar");
     return Ref_funcionC::verificar();
 }

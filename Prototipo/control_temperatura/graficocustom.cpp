@@ -114,7 +114,7 @@ void GraficoCustom::limpiar()
  */
 void GraficoCustom::setRef(QVector<double> referencia_, QVector<double> tiempo_)
 {
-    DTRACE("dibujar referencia inicial");
+    D_TRACE("dibujar referencia inicial");
     limpiar();
     lineaRef->setData(tiempo_, referencia_, true);
     reescalar();
@@ -154,10 +154,10 @@ void GraficoCustom::reescalar()
  */
 void GraficoCustom::showAll(QVector<double> tiempo, QVector<double> referencia, QVector<double> temperatura, QVector<double> u)
 {
-    DTRACE("mostrar todo en grafico");
+    D_TRACE("mostrar todo en grafico");
     rearmar(false);
-//    //DDEBUG("largo de tiempo" << tiempo.length());
-//    //DDEBUG("tiempo" << tiempo);
+//    //D_DEBUG("largo de tiempo" << tiempo.length());
+//    //D_DEBUG("tiempo" << tiempo);
     lineaRef->setData(tiempo, referencia);
     lineaTemp->setData(tiempo, temperatura);
     lineaU->setData(tiempo, u);
@@ -166,7 +166,7 @@ void GraficoCustom::showAll(QVector<double> tiempo, QVector<double> referencia, 
 
 void GraficoCustom::showAll(QVector<double> tiempo, QVector<double> referencia, QVector<double> temperatura, QVector<double> u, QVector<double> ph)
 {
-    DTRACE("mostrar todo en grafico con ph");
+    D_TRACE("mostrar todo en grafico con ph");
     showAll(tiempo, referencia, temperatura, u);
     lineaPh->setData(tiempo, ph);
     rearmar(true);

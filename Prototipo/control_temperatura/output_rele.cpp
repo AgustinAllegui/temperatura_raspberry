@@ -40,14 +40,14 @@ void Output_rele::config(const int n_Ts_)
 
 double Output_rele::setOutput(const double output_)
 {
-    DTRACE("set output" << output_);
+    D_TRACE("set output" << output_);
     output_value = checkSaturacion(output_);
 
 #if CURRENT_DEVICE == ON_PC   // salida a texto
     QFile archivo(direccion);
     if(!archivo.open(QFile::WriteOnly | QFile::Append)){
         //error al abrir el archivo
-        DERROR("no se pudo abrir el archivo out.txt");
+        D_ERROR("no se pudo abrir el archivo out.txt");
     }
 
     QByteArray byteArray;
@@ -72,11 +72,11 @@ double Output_rele::setOutput(const double output_)
         digitalWrite(PIN_RELE, HIGH);
         digitalWrite(PIN_LED_RELE, HIGH);
         emit s_outputChange(true);
-        //DDEBUG("tiempo timer double" << (TsContainer::Ts)*(output_value/100));
+        //D_DEBUG("tiempo timer double" << (TsContainer::Ts)*(output_value/100));
         int timerTime = int((TsContainer::Ts)*(output_value/100));
-        //DDEBUG("tiempo timer" << timerTime << "Segundos");
+        //D_DEBUG("tiempo timer" << timerTime << "Segundos");
         timerTime *= 1000;
-        //DDEBUG("tiempo timer" << timerTime << "Mseg");
+        //D_DEBUG("tiempo timer" << timerTime << "Mseg");
         activeOutTimer.start(timerTime);
     }
 

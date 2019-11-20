@@ -84,14 +84,14 @@ void MainWindow::configureTempLimit()
     QMessageBox error;
     error.setIcon(QMessageBox::Critical);
     if(!archivo.exists()){
-        DERROR("no se encontro archivo de configuracion");
+        D_ERROR("no se encontro archivo de configuracion");
         error.setText("Error: no se encontro el archivo de configuracion config.ini");
         error.exec();
         return;
     }
 
     if(!archivo.open(QFile::ReadOnly | QFile::Text)){
-        DERROR("no se pudo abrir el archivo de configuracion");
+        D_ERROR("no se pudo abrir el archivo de configuracion");
         error.setText("Error: no se pudo abrir el archivo config.ini");
         error.exec();
         return;
@@ -134,7 +134,7 @@ void MainWindow::configureTempLimit()
 
 void MainWindow::on_l_ts_editingFinished()
 {
-    DTRACE("Ts editado");
+    D_TRACE("Ts editado");
     CONTROL_MODIFY_CHECK;
     tsContainer.Ts = ui->l_ts->text().toDouble();
 }
@@ -184,7 +184,7 @@ void MainWindow::on_rb_ref_simple_toggled(bool checked)
 
 void MainWindow::on_l_ref_simple_editingFinished()
 {
-    DTRACE("actualizar Referencia simple");
+    D_TRACE("actualizar Referencia simple");
     CONTROL_MODIFY_CHECK;
     // configurar referencia simple
     refSimple.setFunction(ui->l_ref_simple->text(), REF_SIMPLE_DIR);
@@ -218,7 +218,7 @@ void MainWindow::on_l_dir_ref_fun_editingFinished()
     CONTROL_MODIFY_CHECK;
     controlSys.referencia = &refCustom;
     refCustom.setFile(ui->l_dir_ref_fun->text());
-    //DDEBUG("Referencia de funcion actualizada");
+    //D_DEBUG("Referencia de funcion actualizada");
 }
 
 void MainWindow::on_rb_ref_val_toggled(bool checked)
@@ -260,7 +260,7 @@ void MainWindow::on_l_dir_ref_val_editingFinished()
     controlSys.referencia = &refValores;
     refValores.setFile(ui->l_dir_ref_val->text());
     refValores.verificar();
-    //DDEBUG("Referencia de valores actualizada");
+    //D_DEBUG("Referencia de valores actualizada");
     if(ui->rb_end_mantener->isChecked()){
         refValores.setEndAction(Ref_valores::Mantener);
     }else if(ui->rb_end_0->isChecked()){
@@ -356,11 +356,11 @@ void MainWindow::on_b_e_c_custom_clicked()
 
 void MainWindow::on_l_dir_c_custom_editingFinished()
 {
-    DTRACE("Direccion de controlador editada");
+    D_TRACE("Direccion de controlador editada");
     CONTROL_MODIFY_CHECK;
     controlSys.algoritmo = &algoritmoCustom;
     algoritmoCustom.setFileDir(ui->l_dir_c_custom->text());
-    //DDEBUG("Algoritmo actualizado");
+    //D_DEBUG("Algoritmo actualizado");
 }
 
 void MainWindow::on_sb_future_ref_valueChanged(int arg1)
@@ -374,7 +374,7 @@ void MainWindow::on_sb_future_ref_valueChanged(int arg1)
 
 void MainWindow::on_cb_t_final_toggled(bool checked)
 {
-    DTRACE("Modificar duracion");
+    D_TRACE("Modificar duracion");
     CONTROL_MODIFY_CHECK;
     ui->timeEdit_duracion->setEnabled(checked);
 
@@ -411,12 +411,12 @@ void MainWindow::on_b_usar_t_val_clicked()
 {
     CONTROL_MODIFY_CHECK;
     double largo = (double) refValores.getFileLength();
-    //DDEBUG("largo double" << largo);
+    //D_DEBUG("largo double" << largo);
     double duracion = TsContainer::Ts * largo;
-    //DDEBUG("duracion double" << duracion);
+    //D_DEBUG("duracion double" << duracion);
 
     int duracion_int = (int) duracion +1;
-    //DDEBUG("duracion int" << duracion_int);
+    //D_DEBUG("duracion int" << duracion_int);
     ui->timeEdit_duracion->setTime(QTime(0,0).addSecs(duracion_int));
 }
 
@@ -425,7 +425,7 @@ void MainWindow::on_b_usar_t_val_clicked()
 
 void MainWindow::on_tabWidget_currentChanged(int index)
 {
-    DTRACE("cambio de pestaña" << ui->tabWidget->tabText(index));
+    D_TRACE("cambio de pestaña" << ui->tabWidget->tabText(index));
     if(ui->tabWidget->tabText(index) == "Resumen"){
         //escribir resumen
         if(!controlSys.isRuning()){
@@ -488,7 +488,7 @@ QString MainWindow::generarResumen()
 
 void MainWindow::on_b_iniciar_clicked()
 {
-    DTRACE("on_b_iniciar_clocked");
+    D_TRACE("on_b_iniciar_clocked");
 
     ui->b_iniciar->setEnabled(false);
 
@@ -519,7 +519,7 @@ void MainWindow::on_b_iniciar_clicked()
     on_b_dibujarRef_clicked();
 
     if(!controlSys.controlStart()){
-        DLOG("sistema de control no iniciado");
+        D_LOG("sistema de control no iniciado");
         QMessageBox mensajeError;
         mensajeError.setText("Error: no se pudo iniciar el experimento");
         mensajeError.setIcon(QMessageBox::Critical);
@@ -528,7 +528,7 @@ void MainWindow::on_b_iniciar_clicked()
         return;
     }
 
-    DLOG("sistema de control iniciado");
+    D_LOG("sistema de control iniciado");
 
     ui->b_detener->setEnabled(true);
     ui->b_dibujarRef->setEnabled(false);
@@ -544,7 +544,7 @@ void MainWindow::on_b_iniciar_clicked()
     int Ts_ms = TsContainer::Ts * 1000;
     control_ticker.start(Ts_ms);
 
-    DLOG("tickers iniciados");
+    D_LOG("tickers iniciados");
 }
 
 void MainWindow::on_b_detener_clicked()

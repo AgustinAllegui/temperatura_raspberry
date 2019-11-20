@@ -15,17 +15,17 @@ void Algoritmo_base::limpiarScope()
 
 void Algoritmo_base::setFileDir(QString fileDir_)
 {
-    DTRACE("set file dir");
+    D_TRACE("set file dir");
     fileDir = fileDir_;
     QFile archivo(fileDir);
     if(!archivo.exists()){
-        DERROR("archivo no existe");
+        D_ERROR("archivo no existe");
         return;
     }
 
     //checkear si hay funcion de octave en el archivo
     if(!archivo.open(QFile::ReadOnly)){
-        DERROR("no se pudo abrir archivo");
+        D_ERROR("no se pudo abrir archivo");
         return;
     }
 
@@ -33,21 +33,21 @@ void Algoritmo_base::setFileDir(QString fileDir_)
     while(1){
         reglon = archivo.readLine();
         if(reglon.startsWith("function",Qt::CaseInsensitive)){
-            DLOG("funcion encontrada");
+            D_LOG("funcion encontrada");
             break;
         }
         if(archivo.atEnd()){
-            DERROR("el archivo no contiene una funcion");
+            D_ERROR("el archivo no contiene una funcion");
             break;
         }
     }
-    //DDEBUG("direccion" << fileDir);
+    //D_DEBUG("direccion" << fileDir);
 
 }
 
 void Algoritmo_base::setN_fut(const int n_fut_)
 {
-    DTRACE("set n_fut" << n_fut);
+    D_TRACE("set n_fut" << n_fut);
     n_fut = n_fut_;
     futureRef.clear();
     futureRef.squeeze();
@@ -90,7 +90,7 @@ void Algoritmo_base::passFutureRef(double *futureRef_)
 
 double Algoritmo_base::tic(const double t_, const double ref_, const double temp_)
 {
-    DTRACE("control tic");
+    D_TRACE("control tic");
 
     // llamar a function [u] = funcion(Ts, t, referencia, temperatura, [futRef], [ph]);
     //calcular y retornar el valor para t = t_
@@ -105,7 +105,7 @@ double Algoritmo_base::tic(const double t_, const double ref_, const double temp
     int i = 4;
     Matrix futureRef_matrix;
     if(n_fut>0){
-        //DDEBUG("pass futRef");
+        //D_DEBUG("pass futRef");
         futureRef_matrix = Matrix(n_fut,1);
         for(octave_idx_type j = 0; j<n_fut; j++){
             futureRef_matrix.elem(j,0) = futureRef[j];
@@ -114,15 +114,15 @@ double Algoritmo_base::tic(const double t_, const double ref_, const double temp
         i++;
     }
     if(ph_flag){
-        //DDEBUG("pass ph");
+        //D_DEBUG("pass ph");
         entrada_list(i) = ph;
     }
 
-    //DDEBUG("entrada seteada" << entrada_list.length());
+    //D_DEBUG("entrada seteada" << entrada_list.length());
 
     octave_value_list salida_list = feval(funcion, entrada_list, 1);
 
-    //DDEBUG("salida calculada" << salida_list.length());
+    //D_DEBUG("salida calculada" << salida_list.length());
 
     double accion_control = salida_list(0).double_value();
     return accion_control;
@@ -131,10 +131,10 @@ double Algoritmo_base::tic(const double t_, const double ref_, const double temp
 
 bool Algoritmo_base::verificar()
 {
-    DTRACE("Algoritmo base Verificar");
+    D_TRACE("Algoritmo base Verificar");
     // llamar a function [u] = funcion(Ts, t, referencia, temperatura, [futRef], [ph]);
     //calcular y retornar el valor para t = 1
-    //DDEBUG("direccion" << fileDir);
+    //D_DEBUG("direccion" << fileDir);
     std::string std_fileDir = fileDir.toStdString();
     octave_function *funcion = load_fcn_from_file(std_fileDir);
 
@@ -148,24 +148,24 @@ bool Algoritmo_base::verificar()
     octave_idx_type i = 3;
     if(n_fut>0){
         i++;
-        //DDEBUG("pass futRef" << n_fut);
+        //D_DEBUG("pass futRef" << n_fut);
         futureRef_matrix = Matrix(n_fut,1);
         for(octave_idx_type j = 0; j<n_fut; j++){
-            //DDEBUG("f ref" << j+5);
+            //D_DEBUG("f ref" << j+5);
             futureRef_matrix.elem(j,0) = 5+j;
         }
         entrada_list(i) = futureRef_matrix;
-        //DDEBUG("entradalist" << entrada_list(i).double_value());
+        //D_DEBUG("entradalist" << entrada_list(i).double_value());
     }
     if(ph_flag){
         i++;
-        //DDEBUG("pass ph" << 1);
+        //D_DEBUG("pass ph" << 1);
         entrada_list(i) = 1;
     }
 
-    //DDEBUG("lista de datos");
+    //D_DEBUG("lista de datos");
     for(octave_idx_type k = 0; k<=i ; k++){
-        //DDEBUG(k << entrada_list(k).double_value());
+        //D_DEBUG(k << entrada_list(k).double_value());
     }
 
     octave_value_list salida_list = feval(funcion, entrada_list, 1);
@@ -197,7 +197,7 @@ void Algoritmo_pid::setPID(const double Kp_, const double Ki_, const double Kd_)
 
 double Algoritmo_pid::tic(const double t_, const double ref_, const double temp_)
 {
-    DTRACE("algoritmo PID");
+    D_TRACE("algoritmo PID");
     //function [u] = PID_rbp(Ts, t, ref, temp, Kp, Ki, Kd)
     //u[%] = accion1 =  (kp*e(n) + Kd*(e(n)-e(n-1))/Ts + Ki * Ts * sumatoria(e);
 
@@ -221,7 +221,7 @@ double Algoritmo_pid::tic(const double t_, const double ref_, const double temp_
 
 bool Algoritmo_pid::verificar()
 {
-    DTRACE("Algoritmo PID verificar");
+    D_TRACE("Algoritmo PID verificar");
 
     //function [u] = PID_rbp(Ts, t, ref, temp, Kp, Ki, Kd)
     //u[%] = accion1 =  (kp*e(n) + Kd*(e(n)-e(n-1))/Ts + Ki * Ts * sumatoria(e);

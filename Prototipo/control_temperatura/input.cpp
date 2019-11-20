@@ -21,17 +21,17 @@ double Input_base::readLast()
  */
 double Input_base::read()
 {
-//    DTRACE("input read from text");
+//    D_TRACE("input read from text");
     QFile archivo(direccion);
     if(!archivo.open(QFile::ReadOnly)){
-        DERROR("no se pudo abrir archivo de lectura");
+        D_ERROR("no se pudo abrir archivo de lectura");
         return -1;
     }
 
     static int reglon_count = 0;
 
     if(archivo.atEnd()){
-        DERROR("Archivo pt100 vacio");
+        D_ERROR("Archivo pt100 vacio");
         return -2;
     }
 
@@ -54,7 +54,7 @@ double Input_base::read()
 
 double Input_base::read()
 {
-    DERROR("intento de lectura en Input Base");
+    D_ERROR("intento de lectura en Input Base");
     lastValue = -1;
     return -1;
 }
@@ -98,16 +98,16 @@ InputTermocupla::InputTermocupla()
 #if CURRENT_DEVICE == ON_RASPBERRY
 double InputTermocupla::read()
 {
-    DTRACE("lectura termocupla");
+    D_TRACE("lectura termocupla");
     unsigned char lectura[2];
     digitalWrite(PIN_TERMOCUPLA_CS, LOW);
     wiringPiSPIDataRW(0, lectura, 2);
     digitalWrite(PIN_TERMOCUPLA_CS, HIGH);
 
-//    //DDEBUG(QString("lectura crudo %1 %2").arg(lectura[0],8,2,QLatin1Char('0')).arg(lectura[1],8,2,QLatin1Char('0')));
+//    //D_DEBUG(QString("lectura crudo %1 %2").arg(lectura[0],8,2,QLatin1Char('0')).arg(lectura[1],8,2,QLatin1Char('0')));
 
     if(lectura[1] & 0b00000100){
-        DERROR("termocupla no conectada");
+        D_ERROR("termocupla no conectada");
         return -1;
     }
 
@@ -116,17 +116,17 @@ double InputTermocupla::read()
     lectura16 = lectura16<<8;
     lectura16 += lectura[1];
 
-//    //DDEBUG(QString("lectura junta %1").arg(lectura16,16,2,QLatin1Char('0')));
+//    //D_DEBUG(QString("lectura junta %1").arg(lectura16,16,2,QLatin1Char('0')));
 
     lectura16 &= 0b0111111111111000;
     lectura16 = lectura16 >>3;
-//    //DDEBUG(QString("lectura uint16_t %1").arg(lectura16,16,2,QLatin1Char('0')));
+//    //D_DEBUG(QString("lectura uint16_t %1").arg(lectura16,16,2,QLatin1Char('0')));
 
     double temperatura = lectura16;
-//    //DDEBUG("lectura:" << lectura16);
-//    //DDEBUG("temperatura:" << temperatura);
+//    //D_DEBUG("lectura:" << lectura16);
+//    //D_DEBUG("temperatura:" << temperatura);
     temperatura = temperatura/4;
-    DDEBUG("temperatura Termocupla:" << temperatura);
+    D_DEBUG("temperatura Termocupla:" << temperatura);
 
     lastValue = temperatura;
     emit s_inputTermocupla_read(temperatura);
@@ -176,13 +176,13 @@ InputPT100::InputPT100()
 
 double InputPT100::read()
 {
-    DTRACE("lectura de PT100");
+    D_TRACE("lectura de PT100");
 
     limpiarFallas();
 
     //realizar una lectura (one shot)
     uint8_t reg0 = leerRegistro(0x00);
-    DDEBUG(QString("reg0: %1").arg(reg0, 8, 2, QLatin1Char('0')));
+    D_DEBUG(QString("reg0: %1").arg(reg0, 8, 2, QLatin1Char('0')));
     if(reg0 != 0b10010000){
         escribirRegistro(0x80, 0b10010000);
         reg0 = 0b10010000;
@@ -208,14 +208,14 @@ double InputPT100::read()
     rtd <<= 8;
 
     rtd |= rtdLow;
-    DDEBUG("lectura reg rtd:" << rtd);
+    D_DEBUG("lectura reg rtd:" << rtd);
 
     if(rtd & 0x01){
-        DERROR("Falla en la lectura de PT100" << leerFalla());
+        D_ERROR("Falla en la lectura de PT100" << leerFalla());
         return -1;
     }
     rtd >>= 1;  //quitar bit de falla de lectura
-    DDEBUG("rtd:" << rtd);
+    D_DEBUG("rtd:" << rtd);
 
     //convertir lectura en temperatura
     double Rt = rtd;
@@ -230,7 +230,7 @@ double InputPT100::read()
     double temperatura = Z2 + (Z3 * Rt);
     temperatura = (sqrt(temperatura) + Z1) / Z4;
 
-    DDEBUG("temperatura PT100:" << temperatura);
+    D_DEBUG("temperatura PT100:" << temperatura);
     if(temperatura >= 0){
         lastValue = temperatura;
         emit s_inputPT100_read(temperatura);
@@ -257,7 +257,7 @@ double InputPT100::read()
     rpoly *= Rt;  // ^5
     temperatura += 1.5243e-10 * rpoly;
 
-    DDEBUG("temperatura PT100 2:" << temperatura);
+    D_DEBUG("temperatura PT100 2:" << temperatura);
     lastValue = temperatura;
     emit s_inputPT100_read(temperatura);
     if(temperatura >= safeLimit){

@@ -65,36 +65,41 @@
 #define DEB_DEBUG       3   // valores en informacion sobre el funcionamiento del codigo
 
 
-//#define DEBUG_LEVEL DEB_RELEACE
+#define DEBUG_LEVEL DEB_RELEACE
 //#define DEBUG_LEVEL DEB_LOG
 //#define DEBUG_LEVEL DEB_TRACE
-#define DEBUG_LEVEL DEB_DEBUG
+//#define DEBUG_LEVEL DEB_DEBUG
 
 #endif //debug_level defined
 
+#if (DEBUG_LEVEL >= DEB_RELEACE)
+    #define D_INFO(A) qDebug() << "-INFO" << A
+#else
+    #define D_INFO(A)
+#endif
 
 #if (DEBUG_LEVEL >= DEB_LOG)
-    #define DLOG(A) qDebug() << "-LOG:" << A
+    #define D_LOG(A) qDebug() << "-LOG:" << A
 #else
-    #define DLOG(A)
+    #define D_LOG(A)
 #endif
 
 
 #if (DEBUG_LEVEL >= DEB_TRACE)
-    #define DTRACE(A) qDebug() << "-TRACE:" << A << "\t[" << __FILE__ << __LINE__ <<']'
+    #define D_TRACE(A) qDebug() << "-TRACE:" << A << "\t[" << __FILE__ << __LINE__ <<']'
 #else
-    #define DTRACE(A)
+    #define D_TRACE(A)
 #endif
 
 
 #if (DEBUG_LEVEL >= DEB_DEBUG)
-    #define DDEBUG(A) qDebug() << "--DEBUG:" << A
+    #define D_DEBUG(A) qDebug() << "--DEBUG:" << A
 #else
-    #define DDEBUG(A)
+    #define D_DEBUG(A)
 #endif
 
 
-#define DERROR(A) qDebug() << "---Error:" << A << "\t[" << __FILE__ << __LINE__ <<']'
+#define D_ERROR(A) qDebug() << "---Error:" << A << "\t[" << __FILE__ << __LINE__ <<']'
 
 
 #endif // DEV_OP_H

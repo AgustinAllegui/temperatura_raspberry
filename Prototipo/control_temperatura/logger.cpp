@@ -2,15 +2,15 @@
 
 Logger::Logger()
 {
-    DTRACE("Constructor Logger");
+    D_TRACE("Constructor Logger");
     direccionBuffer = LOG_BUFFER_DIR;
 
     //si no existe el archivo, crearlo
     QFile archivo(direccionBuffer);
     if(!archivo.exists()){
-        DLOG("no se encontro archivo de log. Creando");
+        D_LOG("no se encontro archivo de log. Creando");
         if(!archivo.open(QFile::WriteOnly | QFile::Append)){
-            DERROR("no se pudo crear el archivo");
+            D_ERROR("no se pudo crear el archivo");
         }
         archivo.close();
 
@@ -23,7 +23,7 @@ Logger::Logger()
  */
 void Logger::clear()
 {
-    DTRACE("Clear archivo log");
+    D_TRACE("Clear archivo log");
     QFile archivo(direccionBuffer);
 
     if(archivo.exists()){
@@ -31,7 +31,7 @@ void Logger::clear()
     }
 
     if(!archivo.open(QFile::WriteOnly | QFile::Append)){
-        DERROR("no se pudo crear el archivo");
+        D_ERROR("no se pudo crear el archivo");
     }
     archivo.close();
 }
@@ -43,11 +43,11 @@ void Logger::addPoint(double t_, double ref_, double temp_, double u_, double ph
 {
     QFile archivo(direccionBuffer);
     if(!archivo.exists()){
-        DLOG("no se encontro archivo de log. Se creara");
+        D_LOG("no se encontro archivo de log. Se creara");
     }
 
     if(!archivo.open(QFile::WriteOnly | QFile::Append)){
-        DERROR("no se pudo abrir el archivo");
+        D_ERROR("no se pudo abrir el archivo");
         return;
     }
 
@@ -57,8 +57,8 @@ void Logger::addPoint(double t_, double ref_, double temp_, double u_, double ph
     reglon.append(' ').append(QString::number(u_));
     reglon.append(' ').append(QString::number(ph_));
 
-    //DDEBUG("añadida linea");
-    //DDEBUG(reglon);
+    //D_DEBUG("añadida linea");
+    //D_DEBUG(reglon);
 
     reglon.append("\r\n");
 
@@ -75,14 +75,14 @@ void Logger::addPoint(double t_, double ref_, double temp_, double u_, double ph
  */
 QVector<double> Logger::getColumna(const int columna_)
 {
-    DTRACE("logger Get Columna" << columna_);
+    D_TRACE("logger Get Columna" << columna_);
     QVector<double> respuesta;
     QStringList reglon;
     QFile archivo(direccionBuffer);
 
     //abrir archivo
     if(!archivo.open(QFile::ReadOnly | QFile::Text)){
-        DERROR("no se pudo abrir el archivo");
+        D_ERROR("no se pudo abrir el archivo");
         return respuesta;
     }
 
@@ -124,30 +124,30 @@ void Logger::saveFile(QString direccion_, const bool phFlag)
         return;
     }
 
-    DERROR("formato del archivo no correcto");
+    D_ERROR("formato del archivo no correcto");
 }
 
 
 
 void Logger::saveTxtCsv(QString direccion_, const bool phFlag, const char separator_)
 {
-    DTRACE("guardar txt/csv");
+    D_TRACE("guardar txt/csv");
     QFile archivoOut(direccion_);
     QFile archivoIn(direccionBuffer);
 
     if(!archivoIn.open(QFile::ReadOnly | QFile::Text)){
-        DERROR("no se pudo abrir el archivo de buffer");
+        D_ERROR("no se pudo abrir el archivo de buffer");
         archivoIn.close();
         return;
     }
 
     if(archivoOut.exists()){
-        DLOG("se borrara el archivo txt anterior");
+        D_LOG("se borrara el archivo txt anterior");
         archivoOut.remove();
     }
 
     if(!archivoOut.open(QFile::WriteOnly | QFile::Append)){
-        DERROR("no se pudo crear el archivo de salida");
+        D_ERROR("no se pudo crear el archivo de salida");
         archivoIn.close();
         archivoOut.close();
         return;
@@ -168,9 +168,9 @@ void Logger::saveTxtCsv(QString direccion_, const bool phFlag, const char separa
     while(!archivoIn.atEnd()){
         reglon = archivoIn.readLine();
         if(!phFlag){
-            //DDEBUG("antes de recortar" << reglon);
+            //D_DEBUG("antes de recortar" << reglon);
             reglon.chop(reglon.size()-reglon.lastIndexOf(' '));
-            //DDEBUG("despues de recortar" << reglon);
+            //D_DEBUG("despues de recortar" << reglon);
         }
         archivoOut.write(QByteArray().append(reglon + "\r\n"));
     }
@@ -182,7 +182,7 @@ void Logger::saveTxtCsv(QString direccion_, const bool phFlag, const char separa
 
 void Logger::saveMat(QString direccion_, const bool phFlag)
 {
-    DTRACE("guardar archivo .mat");
+    D_TRACE("guardar archivo .mat");
     //llamar a funcion de octave que guarda los datos
     // /home/pi/Documents/temperatura_raspberry/Files/Internos/guardarMat.m
     QFile dirOut(LOG_DIR_OUT_M);
@@ -194,7 +194,7 @@ void Logger::saveMat(QString direccion_, const bool phFlag)
     }
 
     if(!dirOut.open(QFile::WriteOnly | QFile::Append)){
-        DERROR("no se pudo generar el archivo");
+        D_ERROR("no se pudo generar el archivo");
         dirOut.close();
         return;
     }
@@ -209,7 +209,7 @@ void Logger::saveMat(QString direccion_, const bool phFlag)
     }
 
     if(!dirIn.open(QFile::WriteOnly | QFile::Append)){
-        DERROR("no se pudo generar el archivo");
+        D_ERROR("no se pudo generar el archivo");
         dirIn.close();
         return;
     }

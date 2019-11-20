@@ -10,7 +10,7 @@ ControlSys::ControlSys(QObject *parent)
 
 void ControlSys::setDuracion(const double duracion_)
 {
-    DTRACE("set duracion" << duracion_);
+    D_TRACE("set duracion" << duracion_);
     duracion = duracion_;
 }
 
@@ -21,7 +21,7 @@ bool ControlSys::isRuning()
 
 void ControlSys::controlTic()
 {
-    DTRACE("Control TIC");
+    D_TRACE("Control TIC");
     if(!runState){
         qDebug() << "error: control tic con el sistema sin iniciar";
     }
@@ -50,11 +50,11 @@ void ControlSys::controlTic()
 
     emit s_control_data(timeSinceStart, refValue, tempValue, salidaValue, phValue);
 
-    DLOG("t =" << timeSinceStart);
-    DLOG("t_limite" << duracion);
-    DLOG("temperatura =" << tempValue);
-    DLOG("referencia =" << refValue);
-    DLOG("salida =" << salidaValue);
+    D_LOG("t =" << timeSinceStart);
+    D_LOG("t_limite" << duracion);
+    D_LOG("temperatura =" << tempValue);
+    D_LOG("referencia =" << refValue);
+    D_LOG("salida =" << salidaValue);
 
     timeSinceStart += TsContainer::Ts;
     if(duracion != 0){
@@ -66,22 +66,22 @@ void ControlSys::controlTic()
 
 bool ControlSys::controlStart()
 {
-    DTRACE("Control system: Control start");
+    D_TRACE("Control system: Control start");
     timeSinceStart = 0;
     if(!referencia->verificar()){
-        DERROR("referencia no verificada");
+        D_ERROR("referencia no verificada");
         emit s_control_stop();
         return false;
     }
-    //DDEBUG("referencia verificada");
+    //D_DEBUG("referencia verificada");
     if(!algoritmo->verificar()){
-        DERROR("Algoritmo no verificado");
+        D_ERROR("Algoritmo no verificado");
         emit s_control_stop();
         return false;
     }
-    //DDEBUG("algoritmo verificado");
+    //D_DEBUG("algoritmo verificado");
     algoritmo->limpiarScope();
-    //DDEBUG("scope de octave limpiado");
+    //D_DEBUG("scope de octave limpiado");
     salida->config(1);
     runState = true;
     digitalWrite(PIN_LED_RUN,HIGH);
