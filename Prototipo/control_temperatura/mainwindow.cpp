@@ -6,6 +6,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow),
     entrada_refresh_time(5000)
 {
+    D_INFO("Controlador de temperatura");
+    D_INFO("Version" << NUMERO_VERSION);
     ui->setupUi(this);
     pinMode(PIN_LED_APP, OUTPUT);
     digitalWrite(PIN_LED_APP, HIGH);
