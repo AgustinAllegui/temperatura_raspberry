@@ -31,3 +31,53 @@ bool PinHandler::spiInit(const int channel_, const int speed_)
 #endif
     return true;
 }
+
+
+//-------------------------------------------------------------------------//
+
+
+InterruptCallbackHandler::InterruptCallbackHandler()
+{
+    wiringPiISR(PIN_BOTON_STOP, INT_EDGE_FALLING, &InterruptCallbackHandler::callBack);
+}
+
+void InterruptCallbackHandler::callBack()
+{
+    callToEmit();
+}
+
+void InterruptCallbackHandler::callToEmit(InterruptSignalEmitter *emitter_)
+{
+    static InterruptSignalEmitter *emitter = 0;
+    if(emitter_ != 0){
+        emitter = emitter_;
+        return;
+    }
+
+    if(emitter == 0){
+        D_ERROR("LLamado a callback sin configurar emitter");
+        return;
+    }
+
+    emitter->emitSignal();
+}
+
+InterruptSignalEmitter::InterruptSignalEmitter(QObject *parent)
+    : QObject(parent)
+{
+
+}
+
+void InterruptSignalEmitter::emitSignal()
+{
+    emit s_interrupt();
+}
+
+
+
+
+
+
+
+
+

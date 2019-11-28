@@ -4,7 +4,7 @@
 //--------------------------------------------------------------------------------------------
 /*  Info de version
  */
-#define NUMERO_VERSION "1.0"
+#define NUMERO_VERSION "1.0.2"
 
 
 //--------------------------------------------------------------------------------------------
@@ -103,8 +103,13 @@
     #define D_DEBUG(A)
 #endif
 
-
-#define D_ERROR(A) qDebug() << "---Error:" << A << "\t[" << __FILE__ << __LINE__ <<']'
+#if (DEBUG_LEVEL == DEB_RELEACE)
+    #define D_ERROR(A) qDebug() << "---Error:" << A
+#elif (DEBUG_LEVEL > DEB_RELEACE)
+    #define D_ERROR(A) qDebug() << "---Error:" << A << "\t[" << __FILE__ << __LINE__ <<']'
+#else
+    #define D_ERROR(A)
+#endif
 
 
 #endif // DEV_OP_H

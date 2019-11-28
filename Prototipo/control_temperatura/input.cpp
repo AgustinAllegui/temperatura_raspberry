@@ -107,7 +107,7 @@ double InputTermocupla::read()
 //    //D_DEBUG(QString("lectura crudo %1 %2").arg(lectura[0],8,2,QLatin1Char('0')).arg(lectura[1],8,2,QLatin1Char('0')));
 
     if(lectura[1] & 0b00000100){
-        D_ERROR("termocupla no conectada");
+        //D_ERROR("termocupla no conectada");
         return -1;
     }
 
@@ -211,7 +211,7 @@ double InputPT100::read()
     D_DEBUG("lectura reg rtd:" << rtd);
 
     if(rtd & 0x01){
-        D_ERROR("Falla en la lectura de PT100" << leerFalla());
+        D_LOG("Falla en la lectura de PT100" << leerFalla());
         return -1;
     }
     rtd >>= 1;  //quitar bit de falla de lectura

@@ -9,9 +9,12 @@ MainWindow::MainWindow(QWidget *parent) :
     D_INFO("Controlador de temperatura");
     D_INFO("Version" << NUMERO_VERSION);
     ui->setupUi(this);
+
+    showMaximized();
     pinMode(PIN_LED_APP, OUTPUT);
     digitalWrite(PIN_LED_APP, HIGH);
     doConections();
+    configureStopBouton();
     setInitialValues();
     configureTempLimit();
 
@@ -58,6 +61,12 @@ void MainWindow::doConections()
     connect(&pt100, SIGNAL(s_inputPT100_safeLimitReached()), this, SLOT(slot_safeLimitReached()));
     connect(&termocupla, SIGNAL(s_inputTermocupla_safeLimitReached()), this, SLOT(slot_safeLimitReached()));
 
+}
+
+void MainWindow::configureStopBouton()
+{
+    InterruptCallbackHandler::callToEmit(&interruptEmitter);
+    connect(&interruptEmitter, SIGNAL(s_interrupt()), this, SLOT(on_b_detener_clicked()));
 }
 
 void MainWindow::setInitialValues()
@@ -635,11 +644,19 @@ void MainWindow::slot_controlSys_s_control_data(double t_, double ref_, double t
 
 void MainWindow::slot_lecturaPT100(double temperatura)
 {
+    if(temperatura == -1){
+        ui->label_pt100_value->setText("NC");
+        return;
+    }
+
     ui->label_pt100_value->setText(QString::number(temperatura, 'f', 2).append("°C"));
 }
 
 void MainWindow::slot_lecturaTermocupla(double temperatura)
 {
+    if(temperatura == -1){
+        ui->label_term_value->setText("NC");
+    }
     ui->label_term_value->setText(QString::number(temperatura, 'f', 2).append("°C"));
 }
 
