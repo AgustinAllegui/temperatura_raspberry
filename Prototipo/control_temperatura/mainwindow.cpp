@@ -9,6 +9,8 @@ MainWindow::MainWindow(QWidget *parent) :
     D_INFO("Controlador de temperatura");
     D_INFO("Version" << NUMERO_VERSION);
     ui->setupUi(this);
+
+    showMaximized();
     pinMode(PIN_LED_APP, OUTPUT);
     digitalWrite(PIN_LED_APP, HIGH);
     doConections();
