@@ -103,8 +103,13 @@
     #define D_DEBUG(A)
 #endif
 
-
-#define D_ERROR(A) qDebug() << "---Error:" << A << "\t[" << __FILE__ << __LINE__ <<']'
+#if (DEBUG_LEVEL == DEB_RELEACE)
+    #define D_ERROR(A) qDebug() << "---Error:" << A
+#elif (DEBUG_LEVEL > DEB_RELEACE)
+    #define D_ERROR(A) qDebug() << "---Error:" << A << "\t[" << __FILE__ << __LINE__ <<']'
+#else
+    #define D_ERROR(A)
+#endif
 
 
 #endif // DEV_OP_H
