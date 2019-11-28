@@ -752,7 +752,7 @@ p, li { white-space: pre-wrap; }
          </size>
         </property>
         <property name="text">
-         <string>10°C</string>
+         <string>NC</string>
         </property>
        </widget>
       </item>
@@ -778,7 +778,7 @@ p, li { white-space: pre-wrap; }
          </size>
         </property>
         <property name="text">
-         <string>10°C</string>
+         <string>NC</string>
         </property>
        </widget>
       </item>
@@ -837,7 +837,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>717</width>
-     <height>26</height>
+     <height>27</height>
     </rect>
    </property>
   </widget>

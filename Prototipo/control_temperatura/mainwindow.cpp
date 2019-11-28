@@ -642,11 +642,19 @@ void MainWindow::slot_controlSys_s_control_data(double t_, double ref_, double t
 
 void MainWindow::slot_lecturaPT100(double temperatura)
 {
+    if(temperatura == -1){
+        ui->label_pt100_value->setText("NC");
+        return;
+    }
+
     ui->label_pt100_value->setText(QString::number(temperatura, 'f', 2).append("°C"));
 }
 
 void MainWindow::slot_lecturaTermocupla(double temperatura)
 {
+    if(temperatura == -1){
+        ui->label_term_value->setText("NC");
+    }
     ui->label_term_value->setText(QString::number(temperatura, 'f', 2).append("°C"));
 }
 
