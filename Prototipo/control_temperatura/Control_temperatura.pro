@@ -25,6 +25,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp\
         mainwindow.cpp \
+    Libs/pinhandler.cpp \
     controlsys.cpp \
     Libs/octave_interface.cpp \
     input.cpp \
@@ -34,10 +35,10 @@ SOURCES += main.cpp\
     output_rele.cpp \
     Libs/qcustomplot.cpp \
     graficocustom.cpp \
-    Libs/pinhandler.cpp \
     logger.cpp
 
 HEADERS  += mainwindow.h \
+    Libs/pinhandler.h \
     tscontainer.h \
     controlsys.h \
     Libs/octave_interface.h \
@@ -48,7 +49,6 @@ HEADERS  += mainwindow.h \
     dev_op.h \
     Libs/qcustomplot.h \
     graficocustom.h \
-    Libs/pinhandler.h \
     logger.h
 
 FORMS    += mainwindow.ui

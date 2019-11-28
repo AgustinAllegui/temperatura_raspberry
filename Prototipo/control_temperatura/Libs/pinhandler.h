@@ -2,6 +2,7 @@
 #define PINHANDLER_H
 
 #include "../dev_op.h"
+#include <QObject>
 
 /* definicion de pines
  */
@@ -61,5 +62,29 @@ private:
     static bool spiCh0Inited;
 
 };
+
+//-------------------------------------------------------------------------//
+
+class InterruptSignalEmitter : public QObject
+{
+    Q_OBJECT
+public:
+    InterruptSignalEmitter(QObject *parent = 0);
+    void emitSignal();
+
+signals:
+    void s_interrupt();
+};
+
+class InterruptCallbackHandler
+{
+public:
+    InterruptCallbackHandler();
+    static void callBack();
+    static void callToEmit(InterruptSignalEmitter *emitter_ = 0);
+
+};
+
+
 
 #endif // PINHANDLER_H

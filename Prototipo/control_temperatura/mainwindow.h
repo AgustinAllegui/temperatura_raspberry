@@ -130,11 +130,14 @@ private:
     void setInitialValues();
     void doConections();
     void configureTempLimit();
+    void configureStopBouton();
 
     //variables privadas
     const int entrada_refresh_time; //ms
 
     PinHandler pinHandrler;
+    InterruptSignalEmitter interruptEmitter;
+    InterruptCallbackHandler interruptCallbackHandler;
 
 };
 

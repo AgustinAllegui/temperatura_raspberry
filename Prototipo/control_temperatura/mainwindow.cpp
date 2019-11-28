@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     pinMode(PIN_LED_APP, OUTPUT);
     digitalWrite(PIN_LED_APP, HIGH);
     doConections();
+    configureStopBouton();
     setInitialValues();
     configureTempLimit();
 
@@ -58,6 +59,12 @@ void MainWindow::doConections()
     connect(&pt100, SIGNAL(s_inputPT100_safeLimitReached()), this, SLOT(slot_safeLimitReached()));
     connect(&termocupla, SIGNAL(s_inputTermocupla_safeLimitReached()), this, SLOT(slot_safeLimitReached()));
 
+}
+
+void MainWindow::configureStopBouton()
+{
+    InterruptCallbackHandler::callToEmit(&interruptEmitter);
+    connect(&interruptEmitter, SIGNAL(s_interrupt()), this, SLOT(on_b_detener_clicked()));
 }
 
 void MainWindow::setInitialValues()
