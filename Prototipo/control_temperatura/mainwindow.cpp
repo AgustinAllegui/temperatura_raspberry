@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     //dibujar el ultimo resultado en resultados
-    ui->g_resultados->showAll(logger.getTiempo(), logger.getRef(), logger.getTemperatura(), logger.getU(), logger.getPh());
+    ui->g_resultados->showAll(logger.getTiempo(), logger.getRef(), logger.getTemperatura(), logger.getU());
 
 }
 
