@@ -467,8 +467,12 @@ QString MainWindow::generarResumen()
     resumen.append("\nSensor de temperatura: ");
     if(ui->rb_term->isChecked()){
         resumen.append("Termocupla");
+        resumen.append("\nLimite de seguridad: ");
+        resumen.append(ui->label_Termocupla_safeLimit->text());
     }else if(ui->rb_PID->isChecked()){
         resumen.append("PT100");
+        resumen.append("\nLimite de seguridad: ");
+        resumen.append(ui->label_PT100_safeLimit->text());
     }
 
 //    if(ui->cb_sensor_ph->isChecked()){
