@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     //dibujar el ultimo resultado en resultados
-    ui->g_resultados->showAll(logger.getTiempo(), logger.getRef(), logger.getTemperatura(), logger.getU(), logger.getPh());
+    ui->g_resultados->showAll(logger.getTiempo(), logger.getRef(), logger.getTemperatura(), logger.getU());
 
 }
 
@@ -76,7 +76,8 @@ void MainWindow::setInitialValues()
     on_l_ts_editingFinished();
 
     ui->rb_PT100->setChecked(true);
-    ui->cb_sensor_ph->setChecked(false);
+    //ui->cb_sensor_ph->setChecked(false);
+    on_cb_sensor_ph_toggled(false);
 
     ui->l_ref_simple->setText("0.2*t/Ts");
     ui->rb_ref_simple->setChecked(true);
@@ -466,13 +467,17 @@ QString MainWindow::generarResumen()
     resumen.append("\nSensor de temperatura: ");
     if(ui->rb_term->isChecked()){
         resumen.append("Termocupla");
+        resumen.append("\nLimite de seguridad: ");
+        resumen.append(ui->label_Termocupla_safeLimit->text());
     }else if(ui->rb_PID->isChecked()){
         resumen.append("PT100");
+        resumen.append("\nLimite de seguridad: ");
+        resumen.append(ui->label_PT100_safeLimit->text());
     }
 
-    if(ui->cb_sensor_ph->isChecked()){
-        resumen.append("\nSensor de PH habilitado");
-    }
+//    if(ui->cb_sensor_ph->isChecked()){
+//        resumen.append("\nSensor de PH habilitado");
+//    }
 
     resumen.append("\nReferencia: ");
     if(ui->rb_ref_simple->isChecked()){
@@ -513,7 +518,8 @@ void MainWindow::on_b_iniciar_clicked()
 
     if(ui->rb_c_custom->isChecked()){
         controlSys.algoritmo = &algoritmoCustom;
-        algoritmoCustom.setPh_flag(ui->cb_sensor_ph->isChecked());
+//        algoritmoCustom.setPh_flag(ui->cb_sensor_ph->isChecked());
+        algoritmoCustom.setPh_flag(false);
         algoritmoCustom.setN_fut(ui->sb_future_ref->text().toInt());
     }else if(ui->rb_PID->isChecked()){
         controlSys.algoritmo = &algoritmoPID;
@@ -566,7 +572,8 @@ void MainWindow::on_b_detener_clicked()
 void MainWindow::on_b_dibujarRef_clicked()
 {
     //dibujar referencia si no esta iniciado
-    ui->g_supervision->rearmar(ui->cb_sensor_ph->isChecked());
+//    ui->g_supervision->rearmar(ui->cb_sensor_ph->isChecked());
+    ui->g_supervision->rearmar(false);
     QVector<double> refT, refV;
     double tFinal = 10*60;
     if(ui->cb_t_final->isChecked()){

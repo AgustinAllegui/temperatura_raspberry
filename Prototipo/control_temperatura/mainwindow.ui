@@ -24,7 +24,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_ts">
        <attribute name="title">
@@ -151,19 +151,6 @@
          <widget class="Line" name="line_2">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="cb_sensor_ph">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="text">
-           <string>Sensor de Ph</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -691,16 +678,6 @@ p, li { white-space: pre-wrap; }
              </size>
             </property>
            </spacer>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="cb_incluir_resumen">
-            <property name="text">
-             <string>Incluir configuracion</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
           </item>
           <item>
            <widget class="QPushButton" name="b_exportar">
