@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Control Temperatura
+Comment=Controlador de temperatura
+Icon=
+Exec=sudo /home/pi/temperatura_raspberry/Prototipo/build-Control_temperatura-Desktop-Debug/Control_temperatura
+Type=Application
+Encoding=UTF-8
+Terminal=true
+Categories=None;
