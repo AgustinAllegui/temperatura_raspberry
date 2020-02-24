@@ -26,32 +26,21 @@
 
 #if CURRENT_DEVICE == ON_PC
 
-//archivos de funcionamiento interno
-#define PID_DIR         "/home/pi/Documents/temperatura_raspberry/Files/Internos/PID_rbp.m"
-#define REF_SIMPLE_DIR  "/home/pi/Documents/temperatura_raspberry/Files/Internos/simp_fun.m"
-#define LOG_BUFFER_DIR  "/home/pi/Documents/temperatura_raspberry/Files/Internos/log_buffer.txt"
-#define LOG_FUN_MAT     "/home/pi/Documents/temperatura_raspberry/Files/Internos/guardarMat.m"
-#define LOG_DIR_OUT_M   "/home/pi/Documents/temperatura_raspberry/Files/Internos/setDirOut.m"
-#define LOG_DIR_IN_M    "/home/pi/Documents/temperatura_raspberry/Files/Internos/setDirIn.m"
-#define CONFIG_DIR      "/home/pi/Documents/temperatura_raspberry/Files/Internos/config.ini"
-
 //archivos entrada y salida para pruebas
-#define ENTRADA_FILE_DIR "/home/pi/Documents/temperatura_raspberry/Files/Pruebas/entrada_seno.txt"
-#define SALIDA_FILE_DIR "/home/pi/Documents/temperatura_raspberry/Files/Pruebas/salida.txt"
-
-
-#elif CURRENT_DEVICE == ON_RASPBERRY
-
-//archivos de funcionamiento interno
-#define REF_SIMPLE_DIR  "/home/pi/Documents/control_temperatura/temperatura_raspberry/Files/Internos/simp_fun.m"
-#define PID_DIR         "/home/pi/Documents/control_temperatura/temperatura_raspberry/Files/Internos/PID_rbp.m"
-#define LOG_BUFFER_DIR  "/home/pi/Documents/control_temperatura/temperatura_raspberry/Files/Internos/log_buffer.txt"
-#define LOG_FUN_MAT     "/home/pi/Documents/control_temperatura/temperatura_raspberry/Files/Internos/guardarMat.m"
-#define LOG_DIR_OUT_M   "/home/pi/Documents/control_temperatura/temperatura_raspberry/Files/Internos/setDirOut.m"
-#define LOG_DIR_IN_M    "/home/pi/Documents/control_temperatura/temperatura_raspberry/Files/Internos/setDirIn.m"
-#define CONFIG_DIR      "/home/pi/Documents/control_temperatura/temperatura_raspberry/Files/Internos/config.ini"
+#define ENTRADA_FILE_DIR "/home/pi/temperatura_raspberry/Files/Pruebas/entrada_seno.txt"
+#define SALIDA_FILE_DIR "/home/pi/temperatura_raspberry/Files/Pruebas/salida.txt"
 
 #endif
+
+//archivos de funcionamiento interno
+#define REF_SIMPLE_DIR  "/home/pi/temperatura_raspberry/Files/Internos/simp_fun.m"
+#define PID_DIR         "/home/pi/temperatura_raspberry/Files/Internos/PID_rbp.m"
+#define LOG_BUFFER_DIR  "/home/pi/temperatura_raspberry/Files/Internos/log_buffer.txt"
+#define LOG_FUN_MAT     "/home/pi/temperatura_raspberry/Files/Internos/guardarMat.m"
+#define LOG_DIR_OUT_M   "/home/pi/temperatura_raspberry/Files/Internos/setDirOut.m"
+#define LOG_DIR_IN_M    "/home/pi/temperatura_raspberry/Files/Internos/setDirIn.m"
+#define CONFIG_DIR      "/home/pi/temperatura_raspberry/Files/Internos/config.ini"
+
 
 
 
