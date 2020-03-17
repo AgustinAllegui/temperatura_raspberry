@@ -1,0 +1,16 @@
+% Ejemplo_valores.txt
+10
+11
+12
+13
+
+14
+15
+16
+% este es un comentario
+17
+18
+19.1
+20.25
+
+12.4
