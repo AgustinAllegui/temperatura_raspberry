@@ -79,7 +79,7 @@ void MainWindow::setInitialValues()
     //ui->cb_sensor_ph->setChecked(false);
     on_cb_sensor_ph_toggled(false);
 
-    ui->l_ref_simple->setText("0.2*t/Ts");
+    ui->l_ref_simple->setText("50+50*sin(2*pi*t*(1/100))");
     ui->rb_ref_simple->setChecked(true);
 
     ui->l_Kp->setText("5");
@@ -208,6 +208,7 @@ void MainWindow::on_rb_ref_fun_toggled(bool checked)
     CONTROL_MODIFY_CHECK;
     ui->l_dir_ref_fun->setEnabled(checked);
     ui->b_e_ref_fun->setEnabled(checked);
+    ui->label_prot_ref->setEnabled(checked);
 
     //configurar referencia
     if(checked){
@@ -379,6 +380,9 @@ void MainWindow::on_sb_future_ref_valueChanged(int arg1)
 {
     CONTROL_MODIFY_CHECK;
     algoritmoCustom.setN_fut(arg1);
+    ui->label_prot_cont->setText((arg1 >= 0)?
+                                     "function u = UisR_fut(Ts, t, ref0, temp1, futRef)"
+                                   : "function u = algoritmo(Ts, t, ref0, temp)");
 }
 
 
