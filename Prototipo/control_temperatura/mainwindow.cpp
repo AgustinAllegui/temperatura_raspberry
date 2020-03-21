@@ -600,7 +600,7 @@ void MainWindow::on_b_exportar_clicked()
                                                    tr("guardar datos del ensayo"),
                                                    "~/Documents/",
                                                    tr("Texto (*.txt);;Valores separados por coma (*.csv);;Archivo de valores de MatLab (*.mat)"),
-                                                   &selectedFilter;
+                                                   &selectedFilter
                                                    );
     if(!fileDir.isEmpty()){
         if(selectedFilter.contains(".txt")){
