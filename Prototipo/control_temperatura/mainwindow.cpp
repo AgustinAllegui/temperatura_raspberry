@@ -221,7 +221,7 @@ void MainWindow::on_rb_ref_fun_toggled(bool checked)
 void MainWindow::on_b_e_ref_fun_clicked()
 {
     CONTROL_MODIFY_CHECK;
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Abrir referencia en funcion *.m"), "~/", tr("m file (*.m)"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Abrir referencia en funcion *.m"), "~/Documents/", tr("m file (*.m)"));
     ui->l_dir_ref_fun->setText(fileName);
     on_l_dir_ref_fun_editingFinished();
 }
@@ -262,7 +262,7 @@ void MainWindow::on_rb_ref_val_toggled(bool checked)
 void MainWindow::on_b_e_ref_val_clicked()
 {
     CONTROL_MODIFY_CHECK;
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Abrir referencia en valores *.txt"), "~/", tr("archivo de texto (*.txt)"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Abrir referencia en valores *.txt"), "~/Documents/", tr("archivo de texto (*.txt)"));
     ui->l_dir_ref_val->setText(fileName);
     on_l_dir_ref_val_editingFinished();
 }
@@ -362,7 +362,7 @@ void MainWindow::on_rb_c_custom_toggled(bool checked)
 void MainWindow::on_b_e_c_custom_clicked()
 {
     CONTROL_MODIFY_CHECK;
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Abrir algoritmo personalizado"), "~/", tr("m file (*.m)"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Abrir algoritmo personalizado"), "~/Documents/", tr("m file (*.m)"));
     ui->l_dir_c_custom->setText(fileName);
     on_l_dir_c_custom_editingFinished();
 }
@@ -594,7 +594,30 @@ void MainWindow::on_b_dibujarRef_clicked()
 
 void MainWindow::on_b_exportar_clicked()
 {
-    QString fileDir = QFileDialog::getSaveFileName(this, tr("guardar datos del ensayo"), "~/", tr("Texto (*.txt);;Valores separados por coma (*.csv);;Archivo de valores de MatLab (*.mat)"));
+    QString selectedFilter;
+    QString fileDir = QFileDialog::getSaveFileName(this,
+                                                   tr("guardar datos del ensayo"),
+                                                   "~/Documents/",
+                                                   tr("Texto (*.txt);;Valores separados por coma (*.csv);;Archivo de valores de MatLab (*.mat)"),
+                                                   &selectedFilter;
+                                                   );
+    if(!fileDir.isEmpty()){
+        if(selectedFilter.contains(".txt")){
+            if(!fileDir.endsWith(".txt")){
+                fileDir.append(".txt");
+            }
+        }else if(selectedFilter.contains(".csv")){
+            if(!fileDir.endsWith(".csv")){
+                fileDir.append(".csv");
+            }
+        }else if(selectedFilter.contains(".mat")){
+            if(!fileDir.endsWith(".mat")){
+                fileDir.append(".mat");
+            }
+        }
+    }else{
+        return;
+    }
     logger.saveFile(fileDir, controlSys.algoritmo->getPh_flag());
 }
 

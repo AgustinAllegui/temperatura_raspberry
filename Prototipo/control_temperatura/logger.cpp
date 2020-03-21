@@ -172,6 +172,7 @@ void Logger::saveTxtCsv(QString direccion_, const bool phFlag, const char separa
             reglon.chop(reglon.size()-reglon.lastIndexOf(' '));
             //D_DEBUG("despues de recortar" << reglon);
         }
+        if(separator_ != ' ') reglon.replace(' ',separator_);
         archivoOut.write(QByteArray().append(reglon + "\r\n"));
     }
 
