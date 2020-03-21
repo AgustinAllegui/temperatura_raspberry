@@ -352,6 +352,7 @@ void MainWindow::on_rb_c_custom_toggled(bool checked)
     ui->b_e_c_custom->setEnabled(checked);
     ui->label_ref_fut->setEnabled(checked);
     ui->sb_future_ref->setEnabled(checked);
+    ui->label_prot_cont->setEnabled(checked);
     if(checked){
         if(!ui->l_dir_c_custom->text().isEmpty()){
             on_l_dir_c_custom_editingFinished();
@@ -380,7 +381,7 @@ void MainWindow::on_sb_future_ref_valueChanged(int arg1)
 {
     CONTROL_MODIFY_CHECK;
     algoritmoCustom.setN_fut(arg1);
-    ui->label_prot_cont->setText((arg1 >= 0)?
+    ui->label_prot_cont->setText((arg1 > 0)?
                                      "function u = UisR_fut(Ts, t, ref0, temp1, futRef)"
                                    : "function u = algoritmo(Ts, t, ref0, temp)");
 }
