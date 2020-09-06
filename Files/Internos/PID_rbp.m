@@ -1,5 +1,5 @@
-function [u] = PID_rbp(Ts, t, ref, temp, Kp, Ki, Kd)
-%  u[%] = accion1 =  (kp*e(n) + Kd*(e(n)-e(n-1))/Ts + Ki * Ts * sumatoria(e);
+function [u] = PID_rbp(Ts, t, ref, temp, Kp, Ki, Kd, C)
+%  u[%] = accion1 =  (kp*e(n) + Kd*(e(n)-e(n-1))/Ts + Ki * Ts * sumatoria(e) + C;
 
   global error1;
   if(isempty(error1))
@@ -14,6 +14,7 @@ function [u] = PID_rbp(Ts, t, ref, temp, Kp, Ki, Kd)
 %  display(Kp);
 %  display(Ki);
 %  display(Kd);
+%  display(C);
 
   global errorSum;
   if(isempty(errorSum))
@@ -27,7 +28,7 @@ function [u] = PID_rbp(Ts, t, ref, temp, Kp, Ki, Kd)
   integral = Ki*Ts*errorSum;
   derivativo = Kd * (error0 - error1)/Ts;
 
-  u = proporcional + integral + derivativo;
+  u = proporcional + integral + derivativo + C;
 
   error1 = error0;
 

@@ -66,6 +66,7 @@ private slots:
     void on_l_Kp_editingFinished();
     void on_l_Ki_editingFinished();
     void on_l_Kd_editingFinished();
+    void on_l_C_editingFinished();
     void on_rb_c_custom_toggled(bool checked);
     void on_b_e_c_custom_clicked();
     void on_l_dir_c_custom_editingFinished();
@@ -95,6 +96,8 @@ private slots:
     void slot_output_rele_state_changed(bool activated);
 
     void slot_safeLimitReached();
+
+
 
 
 

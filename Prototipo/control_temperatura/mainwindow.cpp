@@ -1,10 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow),
-    entrada_refresh_time(5000)
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
+                                          ui(new Ui::MainWindow),
+                                          entrada_refresh_time(5000)
 {
     D_INFO("Controlador de temperatura");
     D_INFO("Version" << NUMERO_VERSION);
@@ -18,16 +17,17 @@ MainWindow::MainWindow(QWidget *parent) :
     setInitialValues();
     configureTempLimit();
 
+    ui->label_PID_equation->setPixmap(QPixmap("/home/pi/temperatura_raspberry/Files/Internos/PID_equation.png"));
 
     //dibujar el ultimo resultado en resultados
     ui->g_resultados->showAll(logger.getTiempo(), logger.getRef(), logger.getTemperatura(), logger.getU());
-
 }
 
 MainWindow::~MainWindow()
 {
-    if(controlSys.isRuning()) OutRele.emergencyStop();
-    pinMode(PIN_LED_APP,LOW);
+    if (controlSys.isRuning())
+        OutRele.emergencyStop();
+    pinMode(PIN_LED_APP, LOW);
     delete ui;
 }
 
@@ -60,7 +60,6 @@ void MainWindow::doConections()
     //conectar señales de limite de temperatura
     connect(&pt100, SIGNAL(s_inputPT100_safeLimitReached()), this, SLOT(slot_safeLimitReached()));
     connect(&termocupla, SIGNAL(s_inputTermocupla_safeLimitReached()), this, SLOT(slot_safeLimitReached()));
-
 }
 
 void MainWindow::configureStopBouton()
@@ -83,8 +82,9 @@ void MainWindow::setInitialValues()
     ui->rb_ref_simple->setChecked(true);
 
     ui->l_Kp->setText("5");
-    ui->l_Ki->setText("1");
+    ui->l_Ki->setText("0.1");
     ui->l_Kd->setText("0");
+    ui->l_C->setText("0");
     ui->rb_PID->setChecked(true);
 
     ui->cb_t_final->setChecked(false);
@@ -95,14 +95,16 @@ void MainWindow::configureTempLimit()
     QFile archivo(CONFIG_DIR);
     QMessageBox error;
     error.setIcon(QMessageBox::Critical);
-    if(!archivo.exists()){
+    if (!archivo.exists())
+    {
         D_ERROR("no se encontro archivo de configuracion");
         error.setText("Error: no se encontro el archivo de configuracion config.ini");
         error.exec();
         return;
     }
 
-    if(!archivo.open(QFile::ReadOnly | QFile::Text)){
+    if (!archivo.open(QFile::ReadOnly | QFile::Text))
+    {
         D_ERROR("no se pudo abrir el archivo de configuracion");
         error.setText("Error: no se pudo abrir el archivo config.ini");
         error.exec();
@@ -114,28 +116,30 @@ void MainWindow::configureTempLimit()
     double valorEncontrado;
     archivo.seek(0);
 
-    while(!archivo.atEnd()){
+    while (!archivo.atEnd())
+    {
         reglon = archivo.readLine();
-        if(reglon.startsWith(';')){
+        if (reglon.startsWith(';'))
+        {
             continue;
         }
 
         //buscar el limite de seguridad de la PT100
-        if(reglon.startsWith("PT100-limite")){
+        if (reglon.startsWith("PT100-limite"))
+        {
             valorEncontrado = reglon.split('=').at(1).toDouble();
             pt100.setSafeLimit(valorEncontrado);
             ui->label_PT100_safeLimit->setText(QString::number(valorEncontrado, 'f', 0).append("°C"));
         }
 
         //buscar el limite de seguridad de la termocupla
-        if(reglon.startsWith("termocupla-limite")){
+        if (reglon.startsWith("termocupla-limite"))
+        {
             valorEncontrado = reglon.split('=').at(1).toDouble();
             termocupla.setSafeLimit(valorEncontrado);
             ui->label_Termocupla_safeLimit->setText(QString::number(valorEncontrado, 'f', 0).append("°C"));
         }
     }
-
-
 }
 
 //--------------------------------------------------------------------------------
@@ -157,7 +161,8 @@ void MainWindow::on_rb_PT100_toggled(bool checked)
 {
     CONTROL_MODIFY_CHECK;
     // configurar controlador
-    if(checked){
+    if (checked)
+    {
         controlSys.sensor = &pt100;
     }
 }
@@ -166,7 +171,8 @@ void MainWindow::on_rb_term_toggled(bool checked)
 {
     CONTROL_MODIFY_CHECK;
     //configurar controlador
-    if(checked){
+    if (checked)
+    {
         controlSys.sensor = &termocupla;
     }
 }
@@ -187,7 +193,8 @@ void MainWindow::on_rb_ref_simple_toggled(bool checked)
     ui->label_ref_simple->setEnabled(checked);
     ui->l_ref_simple->setEnabled(checked);
 
-    if(checked){
+    if (checked)
+    {
         //configurar controlador
         controlSys.referencia = &refSimple;
         on_l_ref_simple_editingFinished();
@@ -211,8 +218,10 @@ void MainWindow::on_rb_ref_fun_toggled(bool checked)
     ui->label_prot_ref->setEnabled(checked);
 
     //configurar referencia
-    if(checked){
-        if(!ui->l_dir_c_custom->text().isEmpty()){
+    if (checked)
+    {
+        if (!ui->l_dir_c_custom->text().isEmpty())
+        {
             on_l_dir_ref_fun_editingFinished();
         }
     }
@@ -244,16 +253,20 @@ void MainWindow::on_rb_ref_val_toggled(bool checked)
     ui->rb_end_mantener->setEnabled(checked);
     ui->rb_end_repetir->setEnabled(checked);
 
-    if(ui->cb_t_final->isChecked() && checked){
+    if (ui->cb_t_final->isChecked() && checked)
+    {
         ui->b_usar_t_val->setEnabled(true);
-    }else{
+    }
+    else
+    {
         ui->b_usar_t_val->setEnabled(false);
     }
 
-
     //configurar referencia
-    if(checked){
-        if(!ui->l_dir_ref_val->text().isEmpty()){
+    if (checked)
+    {
+        if (!ui->l_dir_ref_val->text().isEmpty())
+        {
             on_l_dir_ref_val_editingFinished();
         }
     }
@@ -274,11 +287,16 @@ void MainWindow::on_l_dir_ref_val_editingFinished()
     refValores.setFile(ui->l_dir_ref_val->text());
     refValores.verificar();
     //D_DEBUG("Referencia de valores actualizada");
-    if(ui->rb_end_mantener->isChecked()){
+    if (ui->rb_end_mantener->isChecked())
+    {
         refValores.setEndAction(Ref_valores::Mantener);
-    }else if(ui->rb_end_0->isChecked()){
+    }
+    else if (ui->rb_end_0->isChecked())
+    {
         refValores.setEndAction(Ref_valores::Cero);
-    }else if(ui->rb_end_repetir->isChecked()){
+    }
+    else if (ui->rb_end_repetir->isChecked())
+    {
         refValores.setEndAction(Ref_valores::Repetir);
     }
 }
@@ -287,7 +305,8 @@ void MainWindow::on_rb_end_mantener_toggled(bool checked)
 {
     CONTROL_MODIFY_CHECK;
     // configuracion de referencia de valores
-    if(checked){
+    if (checked)
+    {
         refValores.setEndAction(Ref_valores::Mantener);
     }
 }
@@ -296,7 +315,8 @@ void MainWindow::on_rb_end_0_toggled(bool checked)
 {
     CONTROL_MODIFY_CHECK;
     // configuracion de referencia de valores
-    if(checked){
+    if (checked)
+    {
         refValores.setEndAction(Ref_valores::Cero);
     }
 }
@@ -305,11 +325,11 @@ void MainWindow::on_rb_end_repetir_toggled(bool checked)
 {
     CONTROL_MODIFY_CHECK;
     // configuracion de referencia de valores
-    if(checked){
+    if (checked)
+    {
         refValores.setEndAction(Ref_valores::Repetir);
     }
 }
-
 
 // configuracion de la pestaña "Controlador"
 
@@ -319,13 +339,16 @@ void MainWindow::on_rb_PID_toggled(bool checked)
     ui->label_Kp->setEnabled(checked);
     ui->label_Ki->setEnabled(checked);
     ui->label_Kd->setEnabled(checked);
+    ui->label_C->setEnabled(checked);
     ui->l_Kp->setEnabled(checked);
     ui->l_Ki->setEnabled(checked);
     ui->l_Kd->setEnabled(checked);
-    if(checked){
+    ui->l_C->setEnabled(checked);
+    if (checked)
+    {
         //configurar controlador
         controlSys.algoritmo = &algoritmoPID;
-        algoritmoPID.setPID(ui->l_Kp->text().toDouble(), ui->l_Ki->text().toDouble(), ui->l_Kd->text().toDouble());
+        algoritmoPID.setPID(ui->l_Kp->text().toDouble(), ui->l_Ki->text().toDouble(), ui->l_Kd->text().toDouble(), ui->l_C->text().toDouble());
     }
 }
 
@@ -339,10 +362,15 @@ void MainWindow::on_l_Ki_editingFinished()
     CONTROL_MODIFY_CHECK;
     on_l_Kd_editingFinished();
 }
+void MainWindow::on_l_C_editingFinished()
+{
+    CONTROL_MODIFY_CHECK;
+    on_l_Kd_editingFinished();
+}
 void MainWindow::on_l_Kd_editingFinished()
 {
     CONTROL_MODIFY_CHECK;
-    algoritmoPID.setPID(ui->l_Kp->text().toDouble(), ui->l_Ki->text().toDouble(), ui->l_Kd->text().toDouble());
+    algoritmoPID.setPID(ui->l_Kp->text().toDouble(), ui->l_Ki->text().toDouble(), ui->l_Kd->text().toDouble(), ui->l_C->text().toDouble());
 }
 
 void MainWindow::on_rb_c_custom_toggled(bool checked)
@@ -353,8 +381,10 @@ void MainWindow::on_rb_c_custom_toggled(bool checked)
     ui->label_ref_fut->setEnabled(checked);
     ui->sb_future_ref->setEnabled(checked);
     ui->label_prot_cont->setEnabled(checked);
-    if(checked){
-        if(!ui->l_dir_c_custom->text().isEmpty()){
+    if (checked)
+    {
+        if (!ui->l_dir_c_custom->text().isEmpty())
+        {
             on_l_dir_c_custom_editingFinished();
         }
     }
@@ -381,11 +411,9 @@ void MainWindow::on_sb_future_ref_valueChanged(int arg1)
 {
     CONTROL_MODIFY_CHECK;
     algoritmoCustom.setN_fut(arg1);
-    ui->label_prot_cont->setText((arg1 > 0)?
-                                     "function u = UisR_fut(Ts, t, ref0, temp1, futRef)"
-                                   : "function u = algoritmo(Ts, t, ref0, temp)");
+    ui->label_prot_cont->setText((arg1 > 0) ? "function u = UisR_fut(Ts, t, ref0, temp1, futRef)"
+                                            : "function u = algoritmo(Ts, t, ref0, temp)");
 }
-
 
 // configuracion de pestaña "duracion"
 
@@ -395,18 +423,24 @@ void MainWindow::on_cb_t_final_toggled(bool checked)
     CONTROL_MODIFY_CHECK;
     ui->timeEdit_duracion->setEnabled(checked);
 
-    if(ui->rb_ref_val->isChecked() && checked){
+    if (ui->rb_ref_val->isChecked() && checked)
+    {
         ui->b_usar_t_val->setEnabled(true);
-    }else{
+    }
+    else
+    {
         ui->b_usar_t_val->setEnabled(false);
     }
 
     double duracion;
-    if(checked){
-        duracion = ui->timeEdit_duracion->time().hour()*3600;
-        duracion += ui->timeEdit_duracion->time().minute()*60;
+    if (checked)
+    {
+        duracion = ui->timeEdit_duracion->time().hour() * 3600;
+        duracion += ui->timeEdit_duracion->time().minute() * 60;
         duracion += ui->timeEdit_duracion->time().second();
-    }else{
+    }
+    else
+    {
         duracion = 0;
     }
 
@@ -416,9 +450,10 @@ void MainWindow::on_cb_t_final_toggled(bool checked)
 
 void MainWindow::on_timeEdit_duracion_timeChanged(const QTime &time)
 {
-    if(ui->cb_t_final->isChecked()){
-        double duracion = time.hour()*3600;
-        duracion += time.minute()*60;
+    if (ui->cb_t_final->isChecked())
+    {
+        double duracion = time.hour() * 3600;
+        duracion += time.minute() * 60;
         duracion += time.second();
         controlSys.setDuracion(duracion);
     }
@@ -427,25 +462,26 @@ void MainWindow::on_timeEdit_duracion_timeChanged(const QTime &time)
 void MainWindow::on_b_usar_t_val_clicked()
 {
     CONTROL_MODIFY_CHECK;
-    double largo = (double) refValores.getFileLength();
+    double largo = (double)refValores.getFileLength();
     //D_DEBUG("largo double" << largo);
     double duracion = TsContainer::Ts * largo;
     //D_DEBUG("duracion double" << duracion);
 
-    int duracion_int = (int) duracion +1;
+    int duracion_int = (int)duracion + 1;
     //D_DEBUG("duracion int" << duracion_int);
-    ui->timeEdit_duracion->setTime(QTime(0,0).addSecs(duracion_int));
+    ui->timeEdit_duracion->setTime(QTime(0, 0).addSecs(duracion_int));
 }
-
 
 // cambio de pestaña
 
 void MainWindow::on_tabWidget_currentChanged(int index)
 {
     D_TRACE("cambio de pestaña" << ui->tabWidget->tabText(index));
-    if(ui->tabWidget->tabText(index) == "Resumen"){
+    if (ui->tabWidget->tabText(index) == "Resumen")
+    {
         //escribir resumen
-        if(!controlSys.isRuning()){
+        if (!controlSys.isRuning())
+        {
             ui->te_resumen->clear();
             ui->te_resumen->append(generarResumen());
         }
@@ -456,7 +492,8 @@ QString MainWindow::generarResumen()
 {
     QString resumen;
     resumen = "Controlador: ";
-    if(ui->rb_PID->isChecked()){
+    if (ui->rb_PID->isChecked())
+    {
         resumen.append("PID\n"
                        "Kp=");
         resumen.append(ui->l_Kp->text());
@@ -464,45 +501,57 @@ QString MainWindow::generarResumen()
         resumen.append(ui->l_Ki->text());
         resumen.append("; Kd=");
         resumen.append(ui->l_Kd->text());
-    }else if(ui->rb_c_custom){
+        resumen.append("; C=");
+        resumen.append(ui->l_C->text());
+    }
+    else if (ui->rb_c_custom)
+    {
         resumen.append("Funcion en archivo\n");
         resumen.append(ui->l_dir_c_custom->text());
     }
 
     resumen.append("\nSensor de temperatura: ");
-    if(ui->rb_term->isChecked()){
+    if (ui->rb_term->isChecked())
+    {
         resumen.append("Termocupla");
         resumen.append("\nLimite de seguridad: ");
         resumen.append(ui->label_Termocupla_safeLimit->text());
-    }else if(ui->rb_PID->isChecked()){
+    }
+    else if (ui->rb_PID->isChecked())
+    {
         resumen.append("PT100");
         resumen.append("\nLimite de seguridad: ");
         resumen.append(ui->label_PT100_safeLimit->text());
     }
 
-//    if(ui->cb_sensor_ph->isChecked()){
-//        resumen.append("\nSensor de PH habilitado");
-//    }
+    //    if(ui->cb_sensor_ph->isChecked()){
+    //        resumen.append("\nSensor de PH habilitado");
+    //    }
 
     resumen.append("\nReferencia: ");
-    if(ui->rb_ref_simple->isChecked()){
+    if (ui->rb_ref_simple->isChecked())
+    {
         resumen.append("R(Ts,t) = " + ui->l_ref_simple->text());
-    }else if(ui->rb_ref_fun->isChecked()){
+    }
+    else if (ui->rb_ref_fun->isChecked())
+    {
         resumen.append("Funcion en archivo\n");
         resumen.append(ui->l_dir_ref_fun->text());
-    }else if(ui->rb_ref_val->isChecked()){
+    }
+    else if (ui->rb_ref_val->isChecked())
+    {
         resumen.append("Valores en archivo\n");
         resumen.append(ui->l_dir_ref_val->text());
     }
 
     resumen.append("\nTiempo de muestreo: " + ui->l_ts->text() + " segundos");
 
-    if(ui->cb_t_final->isChecked()){
+    if (ui->cb_t_final->isChecked())
+    {
         resumen.append("\nEl experimento se detendra despues de " + ui->timeEdit_duracion->text());
     }
 
     return resumen;
-
 }
 
 // Supervision
@@ -513,26 +562,37 @@ void MainWindow::on_b_iniciar_clicked()
 
     ui->b_iniciar->setEnabled(false);
 
-    if(ui->rb_ref_simple->isChecked()){
+    if (ui->rb_ref_simple->isChecked())
+    {
         controlSys.referencia = &refSimple;
-    }else if(ui->rb_ref_fun->isChecked()){
+    }
+    else if (ui->rb_ref_fun->isChecked())
+    {
         controlSys.referencia = &refCustom;
-    }else if(ui->rb_ref_val->isChecked()){
+    }
+    else if (ui->rb_ref_val->isChecked())
+    {
         controlSys.referencia = &refValores;
     }
 
-    if(ui->rb_c_custom->isChecked()){
+    if (ui->rb_c_custom->isChecked())
+    {
         controlSys.algoritmo = &algoritmoCustom;
-//        algoritmoCustom.setPh_flag(ui->cb_sensor_ph->isChecked());
+        //        algoritmoCustom.setPh_flag(ui->cb_sensor_ph->isChecked());
         algoritmoCustom.setPh_flag(false);
         algoritmoCustom.setN_fut(ui->sb_future_ref->text().toInt());
-    }else if(ui->rb_PID->isChecked()){
+    }
+    else if (ui->rb_PID->isChecked())
+    {
         controlSys.algoritmo = &algoritmoPID;
     }
 
-    if(ui->rb_PT100->isChecked()){
+    if (ui->rb_PT100->isChecked())
+    {
         controlSys.sensor = &pt100;
-    }else if(ui->rb_term->isChecked()){
+    }
+    else if (ui->rb_term->isChecked())
+    {
         controlSys.sensor = &termocupla;
     }
 
@@ -540,7 +600,8 @@ void MainWindow::on_b_iniciar_clicked()
 
     on_b_dibujarRef_clicked();
 
-    if(!controlSys.controlStart()){
+    if (!controlSys.controlStart())
+    {
         D_LOG("sistema de control no iniciado");
         QMessageBox mensajeError;
         mensajeError.setText("Error: no se pudo iniciar el experimento");
@@ -577,19 +638,19 @@ void MainWindow::on_b_detener_clicked()
 void MainWindow::on_b_dibujarRef_clicked()
 {
     //dibujar referencia si no esta iniciado
-//    ui->g_supervision->rearmar(ui->cb_sensor_ph->isChecked());
+    //    ui->g_supervision->rearmar(ui->cb_sensor_ph->isChecked());
     ui->g_supervision->rearmar(false);
     QVector<double> refT, refV;
-    double tFinal = 10*60;
-    if(ui->cb_t_final->isChecked()){
-        tFinal = ui->timeEdit_duracion->time().hour()*3600;
-        tFinal += ui->timeEdit_duracion->time().minute()*60;
+    double tFinal = 10 * 60;
+    if (ui->cb_t_final->isChecked())
+    {
+        tFinal = ui->timeEdit_duracion->time().hour() * 3600;
+        tFinal += ui->timeEdit_duracion->time().minute() * 60;
         tFinal += ui->timeEdit_duracion->time().second();
     }
     controlSys.referencia->getInitRef(refT, refV, tFinal);
     ui->g_supervision->setRef(refV, refT);
 }
-
 
 // Resulatados
 
@@ -600,28 +661,37 @@ void MainWindow::on_b_exportar_clicked()
                                                    tr("guardar datos del ensayo"),
                                                    "~/Documents/",
                                                    tr("Texto (*.txt);;Valores separados por coma (*.csv);;Archivo de valores de MatLab (*.mat)"),
-                                                   &selectedFilter
-                                                   );
-    if(!fileDir.isEmpty()){
-        if(selectedFilter.contains(".txt")){
-            if(!fileDir.endsWith(".txt")){
+                                                   &selectedFilter);
+    if (!fileDir.isEmpty())
+    {
+        if (selectedFilter.contains(".txt"))
+        {
+            if (!fileDir.endsWith(".txt"))
+            {
                 fileDir.append(".txt");
             }
-        }else if(selectedFilter.contains(".csv")){
-            if(!fileDir.endsWith(".csv")){
+        }
+        else if (selectedFilter.contains(".csv"))
+        {
+            if (!fileDir.endsWith(".csv"))
+            {
                 fileDir.append(".csv");
             }
-        }else if(selectedFilter.contains(".mat")){
-            if(!fileDir.endsWith(".mat")){
+        }
+        else if (selectedFilter.contains(".mat"))
+        {
+            if (!fileDir.endsWith(".mat"))
+            {
                 fileDir.append(".mat");
             }
         }
-    }else{
+    }
+    else
+    {
         return;
     }
     logger.saveFile(fileDir, controlSys.algoritmo->getPh_flag());
 }
-
 
 //--------------------------------------------------------------------------------
 
@@ -655,18 +725,21 @@ void MainWindow::slot_control_stoped()
     ui->tab_controlador->setEnabled(true);
 
     ui->g_resultados->limpiar();
-    if(controlSys.algoritmo->getPh_flag()){
+    if (controlSys.algoritmo->getPh_flag())
+    {
         ui->g_resultados->showAll(logger.getTiempo(), logger.getRef(), logger.getTemperatura(), logger.getU(), logger.getPh());
-    }else{
+    }
+    else
+    {
         ui->g_resultados->showAll(logger.getTiempo(), logger.getRef(), logger.getTemperatura(), logger.getU());
     }
-
 }
 
 void MainWindow::slot_controlSys_s_control_data(double t_, double ref_, double temp_, double u_, double ph_)
 {
     //agregar al grafico
-    if(controlSys.algoritmo->getPh_flag()){
+    if (controlSys.algoritmo->getPh_flag())
+    {
         ui->g_supervision->addPhPoint(t_, ph_);
     }
     ui->g_supervision->addPoint(t_, ref_, temp_, u_);
@@ -679,7 +752,8 @@ void MainWindow::slot_controlSys_s_control_data(double t_, double ref_, double t
 
 void MainWindow::slot_lecturaPT100(double temperatura)
 {
-    if(temperatura == -1){
+    if (temperatura == -1)
+    {
         ui->label_pt100_value->setText("NC");
         return;
     }
@@ -689,7 +763,8 @@ void MainWindow::slot_lecturaPT100(double temperatura)
 
 void MainWindow::slot_lecturaTermocupla(double temperatura)
 {
-    if(temperatura == -1){
+    if (temperatura == -1)
+    {
         ui->label_term_value->setText("NC");
     }
     ui->label_term_value->setText(QString::number(temperatura, 'f', 2).append("°C"));
@@ -697,9 +772,12 @@ void MainWindow::slot_lecturaTermocupla(double temperatura)
 
 void MainWindow::slot_output_rele_state_changed(bool activated)
 {
-    if(activated){
+    if (activated)
+    {
         ui->label_act_state->setText("Activado");
-    }else{
+    }
+    else
+    {
         ui->label_act_state->setText("Desactivado");
     }
 }
@@ -720,5 +798,4 @@ void MainWindow::slot_safeLimitReached()
                          "El experimento se detuvo para evitar daños");
     mensajeError.setIcon(QMessageBox::Warning);
     mensajeError.exec();
-
 }

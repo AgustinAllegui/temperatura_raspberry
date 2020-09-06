@@ -5,7 +5,6 @@
  *  y realiza el llamado a las funciones de octave usando la API de Octave
  */
 
-
 #include <QString>
 #include <QFile>
 #include <QVector>
@@ -45,14 +44,11 @@ protected:
     int n_fut;
     bool ph_flag;
 
-//    bool functionCheck(const bool ph_);
-
+    //    bool functionCheck(const bool ph_);
 
 private:
     Octave_interface octave;
 };
-
-
 
 class Algoritmo_pid : public Algoritmo_base
 {
@@ -64,10 +60,10 @@ public:
     bool verificar();
 
     //setters
-    void setPID(const double Kp_, const double Ki_, const double Kd_);
+    void setPID(const double Kp_, const double Ki_, const double Kd_, const double C_);
 
 private:
-    double Kp, Ki, Kd;
+    double Kp, Ki, Kd, C;
 };
 
 #endif // ALGORITMO_H
